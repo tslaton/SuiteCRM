@@ -4,6 +4,28 @@
 
 # SuiteCRM 7.14.6
 
+## New to this fork:
+
+To start the dev server in your local environment, install [Docker](https://www.docker.com/) then run:
+
+```
+docker-compose up -d
+docker-compose exec web composer install
+```
+
+Then navigate to `http://localhost:8080` to see it. 
+The first time you do so, SuiteCRM kicks off an installation wizard.
+
+use these database settings:
+```
+Host Name: db (the Docker service name)
+Database Name: suitecrm
+Database User: suitecrm
+Database Password: suitecrm
+```
+
+and set the admin username, password, and email however you see fit.
+
 [![Build Status](https://travis-ci.org/salesagility/SuiteCRM.svg?branch=hotfix)](https://travis-ci.org/salesagility/SuiteCRM)
 [![codecov](https://codecov.io/gh/salesagility/SuiteCRM/branch/hotfix/graph/badge.svg)](https://codecov.io/gh/salesagility/SuiteCRM/branch/hotfix)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/suitecrm/Lobby)

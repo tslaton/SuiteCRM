@@ -1,0 +1,54 @@
+version: '3.8'  
+  
+services:  
+  web:  
+    image: php:7.4-apache  
+    container_name: suitecrm-web  
+    ports:  
+      - "8080:80"  
+    volumes:  
+      - .:/var/www/html  
+      - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf  
+    environment:  
+      - APACHE_DOCUMENT_ROOT=/var/www/html  
+    depends_on:  
+      - db  
+    command: >  
+      bash -c "  
+      apt-get update &&  
+      apt-get install -y libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev unzip &&  
+      docker-php-ext-configure gd --with-freetype --with-jpeg &&  
+      docker-php-ext-install pdo pdo_mysql mysqli zip gd mbstring xml &&  
+      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&  
+      a2enmod rewrite &&  
+      apache2-foreground  
+      "
+  
+  db:  
+    image: mysql:8.0  
+    container_name: suitecrm-db  
+    environment:  
+      MYSQL_ROOT_PASSWORD: root  
+      MYSQL_DATABASE: suitecrm  
+      MYSQL_USER: suitecrm  
+      MYSQL_PASSWORD: suitecrm  
+    ports:  
+      - "3306:3306"  
+    volumes:  
+      - db_data:/var/lib/mysql  
+  
+  phpmyadmin:  
+    image: phpmyadmin/phpmyadmin  
+    container_name: suitecrm-phpmyadmin  
+    ports:  
+      - "8081:80"  
+    environment:  
+      PMA_HOST: db  
+      PMA_PORT: 3306  
+      PMA_USER: suitecrm  
+      PMA_PASSWORD: suitecrm  
+    depends_on:  
+      - db
+  
+volumes:  
+  db_data:
