@@ -3110,6 +3110,7 @@ $app_list_strings['moduleList']['AOS_Invoices'] = 'Invoices';
 $app_list_strings['moduleList']['AOS_PDF_Templates'] = 'PDF - Templates';
 $app_list_strings['moduleList']['AOS_Product_Categories'] = 'Products - Categories';
 $app_list_strings['moduleList']['AOS_Products'] = 'Products';
+$app_list_strings['moduleList']['RE_Properties'] = 'Properties';
 $app_list_strings['moduleList']['AOS_Products_Quotes'] = 'Line Items';
 $app_list_strings['moduleList']['AOS_Line_Item_Groups'] = 'Line Item Groups';
 $app_list_strings['moduleList']['AOS_Quotes'] = 'Quotes';
@@ -3794,3 +3795,29 @@ $app_strings['LBL_INBOUND_ACCOUNT'] = 'Inbound Account';
 $app_strings['LBL_SYSTEM_ACCOUNT'] = 'System Account';
 $app_strings['LBL_FROM_SYSTEM'] = 'Send From System';
 $app_strings['LBL_SIGNATURE'] = 'Signature';
+
+// RE_Properties dropdown lists
+$app_list_strings['property_type_list'] = array(
+    '' => '',
+    'single_family' => 'Single Family Home',
+    'condo' => 'Condominium',
+    'townhouse' => 'Townhouse',
+    'multi_family' => 'Multi-Family',
+    'apartment' => 'Apartment',
+    'commercial' => 'Commercial',
+    'land' => 'Land/Lot',
+    'mobile_home' => 'Mobile Home',
+    'other' => 'Other',
+);
+
+$app_list_strings['property_status_list'] = array(
+    '' => '',
+    'active' => 'Active',
+    'pending' => 'Pending',
+    'sold' => 'Sold',
+    'off_market' => 'Off Market',
+    'coming_soon' => 'Coming Soon',
+    'contingent' => 'Contingent',
+    'withdrawn' => 'Withdrawn',
+    'expired' => 'Expired',
+);
