@@ -52,7 +52,7 @@ $viewdefs['Opportunities']['EditView'] = array(
     
     array(
       array('name'=>'name'),
-      'account_name',
+      'property_name',
     ),
     array(
         array('name'=>'currency_id','label'=>'LBL_CURRENCY'),

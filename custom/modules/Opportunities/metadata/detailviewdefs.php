@@ -90,7 +90,7 @@ array(
         0 =>
         array(
           0 => 'name',
-          1 => 'account_name',
+          1 => 'property_name',
         ),
         1 =>
         array(
