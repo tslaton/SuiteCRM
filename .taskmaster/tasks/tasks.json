@@ -278,15 +278,15 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Create Kanban View Controller and Data Fetching Logic",
             "description": "Develop a new view file (custom/modules/Opportunities/views/view.kanban.php) extending SugarView, and implement a controller method to fetch transactions grouped by sales_stage.",
             "dependencies": [],
-            "details": "Set up the PHP controller to retrieve Opportunities records, grouping them by the sales_stage dropdown. Ensure the data structure supports Kanban columns and cards, and is optimized for AJAX consumption.",
-            "status": "pending",
+            "details": "Set up the PHP controller to retrieve Opportunities records, grouping them by the sales_stage dropdown. Ensure the data structure supports Kanban columns and cards, and is optimized for AJAX consumption.\n<info added on 2025-07-25T19:10:51.444Z>\nImplemented Kanban view controller with the following components:\n\n1. Created custom/modules/Opportunities/views/view.kanban.php extending SugarView\n2. Implemented getOpportunitiesGroupedByStage() method that fetches and groups transactions by sales stage\n3. Added calculateStageStatistics() function to compute count and total value per stage\n4. Created action_updateStage() method for AJAX stage updates with proper ACL security checks\n5. Developed custom controller.php to handle the kanban action\n6. Optimized data structure for Kanban display including all necessary fields\n7. Added days_in_stage calculation for each transaction\n8. Implemented proper security handling and efficient data fetching with joins\n9. Structured controller to support both initial display and AJAX update functionality\n</info added on 2025-07-25T19:10:51.444Z>",
+            "status": "done",
             "testStrategy": "Test that the controller returns grouped transaction data for various sales_stage values. Verify correct data structure and performance with large datasets."
           },
           {
@@ -296,8 +296,8 @@
             "dependencies": [
               "5.1"
             ],
-            "details": "Implement the Kanban column structure in Smarty, dynamically generating columns for each sales_stage. Style cards to display property address, client name, amount, and days in stage. Add summary statistics (count and total value) at the top of each column.",
-            "status": "pending",
+            "details": "Implement the Kanban column structure in Smarty, dynamically generating columns for each sales_stage. Style cards to display property address, client name, amount, and days in stage. Add summary statistics (count and total value) at the top of each column.\n<info added on 2025-07-25T19:12:26.352Z>\nCreated custom/modules/Opportunities/tpls/kanban.tpl with Bootstrap 3 responsive design. Implemented dynamic column generation for each sales stage with summary statistics (count and total value) at top of each column. Designed cards to display transaction name (linked to detail view), account/client name, amount (formatted currency), close date, days in current stage, and assigned user. Implemented responsive layout with horizontal scrolling on mobile and added CSS styling with hover effects and visual feedback. Included empty state messages for columns without transactions. Used Bootstrap 3 grid system (col-sm-6 col-md-4 col-lg-2) for responsive columns. The template is fully compatible with SuiteCRM 7.x and ready for jKanban integration.\n</info added on 2025-07-25T19:12:26.352Z>",
+            "status": "done",
             "testStrategy": "Verify that the Kanban board renders correctly with varying numbers of columns and cards. Check that summary statistics are accurate and cards display all required information."
           },
           {
@@ -307,8 +307,8 @@
             "dependencies": [
               "5.2"
             ],
-            "details": "Configure jKanban to recognize columns as sales stages and cards as transactions. Implement event handlers to trigger AJAX updates when cards are moved between columns.",
-            "status": "pending",
+            "details": "Configure jKanban to recognize columns as sales stages and cards as transactions. Implement event handlers to trigger AJAX updates when cards are moved between columns.\n<info added on 2025-07-25T19:16:49.862Z>\nImplemented native drag-and-drop functionality without requiring jKanban library:\n1. Created custom/modules/Opportunities/js/kanban.js with full drag-and-drop implementation\n2. Implemented HTML5 drag and drop API for desktop browsers\n3. Added touch support for mobile devices with custom touch event handling\n4. Configured event handlers for:\n   - dragstart/dragend on cards\n   - dragover/dragenter/dragleave on columns\n   - drop event to handle card movement\n5. Integrated AJAX calls to update transaction stage when cards are moved\n6. Added visual feedback during drag operations (opacity, drag-over styling)\n7. Implemented statistics updates after successful moves\n8. Added error handling with card reversion if update fails\n9. Included notification system for success/error messages\n10. Updated template to include the JavaScript file\n\nThe implementation provides a complete drag-and-drop experience without external dependencies, fully integrated with the existing AJAX update functionality.\n</info added on 2025-07-25T19:16:49.862Z>",
+            "status": "done",
             "testStrategy": "Test dragging cards between columns and ensure UI updates instantly. Confirm that drag-and-drop works on all supported browsers."
           },
           {
@@ -318,8 +318,8 @@
             "dependencies": [
               "5.3"
             ],
-            "details": "Implement secure server-side logic to update the sales_stage field for a transaction when a card is moved. Return updated data for UI refresh and handle error cases gracefully.",
-            "status": "pending",
+            "details": "Implement secure server-side logic to update the sales_stage field for a transaction when a card is moved. Return updated data for UI refresh and handle error cases gracefully.\n<info added on 2025-07-25T19:17:28.995Z>\nThe custom API endpoint implementation has been integrated directly into the view controller instead of creating a separate API file. The action_updateStage() method in view.kanban.php handles all stage update functionality following SuiteCRM's MVC pattern. This method processes AJAX requests when cards are moved on the Kanban board, performs ACL security checks, validates required parameters (opportunity_id and new_stage), updates the sales_stage field with appropriate probability adjustments, and returns JSON responses with success/failure status. Error handling is implemented for missing records and access denied scenarios. The JavaScript in kanban.js interacts with this endpoint through AJAX calls when users drag and drop cards between columns.\n</info added on 2025-07-25T19:17:28.995Z>",
+            "status": "done",
             "testStrategy": "Test that moving a card triggers an API call and updates the database correctly. Verify error handling for invalid requests and permissions."
           },
           {
@@ -329,8 +329,8 @@
             "dependencies": [
               "5.4"
             ],
-            "details": "Implement the toggle button in the module's toolbar. Refine card and column styles for clarity and usability. Ensure accessibility and responsive design.",
-            "status": "pending",
+            "details": "Implement the toggle button in the module's toolbar. Refine card and column styles for clarity and usability. Ensure accessibility and responsive design.\n<info added on 2025-07-25T19:23:07.807Z>\nAdded Kanban/List view toggle and finalized UI enhancements:\n1. Created custom/modules/Opportunities/Menu.php to add \"Pipeline View\" menu option\n2. Added LNK_KANBAN_VIEW language string in custom language file\n3. Added view toggle buttons in the Kanban template header:\n   - \"List View\" button to return to standard list\n   - \"Pipeline View\" button (active/disabled state)\n4. Styled buttons using Bootstrap 3 classes with glyphicon icons\n5. Positioned toggle buttons in the module header for easy access\n\nThe implementation provides seamless navigation between list and Kanban views through both the module menu and inline toggle buttons. All UI elements are polished with consistent styling, responsive design, and clear visual indicators.\n</info added on 2025-07-25T19:23:07.807Z>",
+            "status": "done",
             "testStrategy": "Test toggling between views, verify UI consistency, and check that all information is visible and accessible on different devices."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-25T18:38:44.948Z",
+      "updated": "2025-07-25T19:23:21.941Z",
       "description": "Tasks for master context"
     }
   }

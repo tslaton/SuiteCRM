@@ -35,6 +35,9 @@ $mod_strings['LBL_CLOSED_WON_OPPORTUNITIES'] = 'Closed Won Transactions';
 $mod_strings['LBL_CAMPAIGN_OPPORTUNITY'] = 'Campaigns';
 $mod_strings['LNK_IMPORT_OPPORTUNITIES'] = 'Import Transactions';
 
+// Add menu link for Kanban view
+$mod_strings['LNK_KANBAN_VIEW'] = 'Pipeline View';
+
 // Update Sales Stage dropdown options for real estate
 $app_list_strings['sales_stage_dom'] = array(
     'Inquiry' => 'Inquiry',
