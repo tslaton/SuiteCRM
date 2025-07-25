@@ -16,6 +16,8 @@ custom/modules/*/Ext/
 custom/application/Ext/
 custom/Extension/application/Ext/Include/modules.ext.php
 custom/Extension/application/Ext/Language/*.lang.ext.php
+# Auto-generated field overrides
+custom/Extension/modules/*/Ext/Vardefs/_override_sugarfield_jjwg_maps_*.php
 # Ignore AOD indexes
 modules/AOD_Index/Index/*
 install/status.json
