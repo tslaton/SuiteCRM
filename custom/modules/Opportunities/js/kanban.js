@@ -115,18 +115,21 @@
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     module: 'Opportunities',
                     action: 'updateStage',
                     opportunity_id: cardId,
                     new_stage: newStage,
-                    sugar_body_only: 1
+                    to_pdf: true
                 },
                 success: function(response) {
                     SUGAR.ajaxUI.hideLoadingPanel();
                     
                     try {
-                        var result = JSON.parse(response);
+                        // Check if response is already an object (jQuery might have parsed it)
+                        var result = typeof response === 'object' ? response : JSON.parse(response);
+                        
                         if (result.success) {
                             // Update statistics
                             self.updateColumnStats(originalStage);
@@ -140,6 +143,8 @@
                             self.showNotification(result.message || 'Failed to update transaction', 'error');
                         }
                     } catch (e) {
+                        console.error('Error parsing response:', e);
+                        console.error('Response was:', response);
                         // Revert the move
                         self.revertMove(cardId, originalStage);
                         self.showNotification('An error occurred while updating', 'error');
