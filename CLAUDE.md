@@ -11,65 +11,92 @@ Key insights from documentation:
 - Supports responsive UI via the SuiteP theme with variants (Day, Dawn, Dusk, Night).
 - Includes features like inline editing, advanced search, campaign management, and OAuth2-based API.
 
+## Docker Development Environment
+
+For development, use the Docker setup defined in `docker-compose.yml` instead of direct installations on your host machine. This provides a consistent environment with PHP 7.4, Apache, MySQL 8.0, and phpMyAdmin. The setup mounts the project directory into the container for live code changes.
+
+### Setup Instructions
+1. Ensure Docker and Docker Compose are installed.
+2. Run `docker-compose up -d` to start the services.
+3. Access SuiteCRM at `http://localhost:8080` (initial installation may be required via the web interface).
+4. Access phpMyAdmin at `http://localhost:8081` (login: suitecrm/suitecrm).
+
+### Running Commands in Docker
+Most development commands (e.g., Composer, testing) should be executed inside the `suitecrm-web` container using `docker-compose exec`. Example:
+```bash
+docker-compose exec web composer install
+```
+
+To access a shell in the container:
+```bash
+docker-compose exec web bash
+```
+
+Stop the services with `docker-compose down`.
+
+Note: The web container automatically installs PHP extensions and Composer on startup. For testing that requires a browser (e.g., acceptance tests), you may need to configure Codeception to use the Docker host's URL (`http://host.docker.internal:8080` from inside the container, or adjust accordingly).
+
 ## Development Commands
+
+Use the Docker prefix for all commands (e.g., `docker-compose exec web <command>`).
 
 ### Composer Commands
 ```bash
 # Install dependencies
-composer install
+docker-compose exec web composer install
 
 # Update dependencies
-composer update
+docker-compose exec web composer update
 
 # Optimize autoloader
-composer dump-autoload -o
+docker-compose exec web composer dump-autoload -o
 ```
 
 ### Testing Commands
 ```bash
 # Run all tests
-vendor/bin/codecept run
+docker-compose exec web vendor/bin/codecept run
 
 # Run specific test suite
-vendor/bin/codecept run unit
-vendor/bin/codecept run acceptance
-vendor/bin/codecept run api
-vendor/bin/codecept run install
+docker-compose exec web vendor/bin/codecept run unit
+docker-compose exec web vendor/bin/codecept run acceptance
+docker-compose exec web vendor/bin/codecept run api
+docker-compose exec web vendor/bin/codecept run install
 
 # Run with coverage
-vendor/bin/codecept run --coverage --coverage-html
+docker-compose exec web vendor/bin/codecept run --coverage --coverage-html
 
 # Run a specific test
-vendor/bin/codecept run tests/unit/YourTestCest.php
+docker-compose exec web vendor/bin/codecept run tests/unit/YourTestCest.php
 ```
 
 ### Code Quality Tools
 ```bash
 # PHP CS Fixer
-vendor/bin/php-cs-fixer fix
+docker-compose exec web vendor/bin/php-cs-fixer fix
 
 # PHPStan static analysis
-vendor/bin/phpstan analyse
+docker-compose exec web vendor/bin/phpstan analyse
 
 # Run Rector for code upgrades
-vendor/bin/rector process
+docker-compose exec web vendor/bin/rector process
 ```
 
 ### Robo Tasks
 ```bash
 # Robo is available for task automation
-vendor/bin/robo
+docker-compose exec web vendor/bin/robo
 ```
 
 ### Additional Commands from Documentation
 ```bash
-# Run Elasticsearch-specific commands (for integration testing)
-vendor/bin/robo elastic:index
-vendor/bin/robo elastic:search "query"
-vendor/bin/robo elastic:rm-index
+# Run Elasticsearch-specific commands (for integration testing; ensure Elasticsearch is running externally or add to docker-compose)
+docker-compose exec web vendor/bin/robo elastic:index
+docker-compose exec web vendor/bin/robo elastic:search "query"
+docker-compose exec web vendor/bin/robo elastic:rm-index
 
 # Optimize for development (clear cache, enable debug mode)
-# Adjust config.php: 'debug' => true;
+# Adjust config.php: 'debug' => true; (edit via phpMyAdmin or container shell)
 ```
 
 ## High-Level Architecture
@@ -161,7 +188,7 @@ vendor/bin/robo elastic:rm-index
 
 2. **Database Changes**: Use the Extension framework for vardefs modifications rather than direct database alterations. Avoid direct SQL; use SugarBean methods.
 
-3. **Testing**: Write tests for new functionality, following existing patterns in `tests/`. Use AcceptanceTester helpers (e.g., loginAsAdmin(), dontSeeErrors()).
+3. **Testing**: Write tests for new functionality, following existing patterns in `tests/`. Use AcceptanceTester helpers (e.g., loginAsAdmin(), dontSeeErrors()). Run tests inside the Docker container.
 
 4. **Module Development**: New modules should follow the existing module structure and extend appropriate base classes (e.g., SugarBean). Add metadata files and language packs.
 
