@@ -1,0 +1,43 @@
+# Task ID: 12
+# Title: Customize Main Navigation Menu
+# Status: pending
+# Dependencies: 1, 2
+# Priority: low
+# Description: Modify the main SuiteCRM navigation to prioritize real estate-specific modules and simplify the user experience.
+# Details:
+Create a custom extension file (custom/Extension/application/Ext/Menu/real_estate_menu.php) to modify the top navigation menu. Reorder modules to prioritize Properties, Contacts, and Transactions. Remove or deprioritize modules not relevant to real estate agents. Add custom menu items for quick access to frequently used features (Add Property, Schedule Showing, Generate CMA). Implement a simplified menu structure with dropdown categories if needed. Use CSS to style the menu with real estate-themed colors and icons. Ensure the menu is responsive and works well on mobile devices. Consider implementing a collapsible sidebar navigation as an alternative to the top menu for better space utilization. Use SuiteCRM's built-in menu extension points to ensure compatibility with future updates.
+
+# Test Strategy:
+Verify the menu displays the correct modules in the specified order. Test navigation to all key modules and features. Test responsive behavior on different screen sizes. Verify custom menu items link to the correct actions. Test with different user roles to ensure appropriate access controls are maintained.
+
+# Subtasks:
+## 1. Analyze and Prioritize Real Estate Modules [pending]
+### Dependencies: None
+### Description: Identify all modules relevant to real estate workflows and determine their priority order for the main navigation menu, focusing on Properties, Contacts, and Transactions.
+### Details:
+Review existing SuiteCRM modules and any custom modules. Create a prioritized list with Properties, Contacts, and Transactions at the top. Document modules to remove or deprioritize based on real estate agent needs.
+
+## 2. Develop Custom Menu Extension File [pending]
+### Dependencies: 12.1
+### Description: Create and configure the custom extension file (custom/Extension/application/Ext/Menu/real_estate_menu.php) to implement the new navigation structure.
+### Details:
+Write PHP code to reorder modules, remove or hide non-relevant modules, and add custom menu items for quick access to Add Property, Schedule Showing, and Generate CMA. Use SuiteCRM's menu extension points for compatibility.
+
+## 3. Implement Dropdown Categories and Collapsible Sidebar [pending]
+### Dependencies: 12.2
+### Description: Design and implement a simplified menu structure with dropdown categories and, if needed, a collapsible sidebar navigation for improved usability and space utilization.
+### Details:
+Group related modules and features under dropdown categories. Develop a collapsible sidebar alternative to the top menu, ensuring both options are available and user-friendly.
+
+## 4. Apply Real Estate-Themed Styling and Icons [pending]
+### Dependencies: 12.2
+### Description: Style the navigation menu using CSS to reflect real estate branding, including custom colors and icons for key modules and menu items.
+### Details:
+Create or source real estate-themed icons. Update CSS to apply the new color scheme and icons to the navigation menu. Ensure visual consistency with other real estate modules.
+
+## 5. Ensure Responsiveness and Role-Based Access [pending]
+### Dependencies: 12.3, 12.4
+### Description: Optimize the navigation menu for mobile devices and implement access controls so users see only the modules and menu items appropriate for their roles.
+### Details:
+Test and refine the menu layout for various screen sizes. Configure SuiteCRM role-based menu visibility using built-in settings or custom logic as needed.
+

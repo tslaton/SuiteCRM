@@ -1,0 +1,43 @@
+# Task ID: 8
+# Title: Design Real Estate Hub Dashboard Framework
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Create the framework for the custom Real Estate Hub dashboard that will replace the default SuiteCRM homepage.
+# Details:
+Create a custom controller (custom/modules/Home/controller.php) that overrides the default Home module controller. Create a custom view (custom/modules/Home/views/view.real-estate-hub.php) that extends SugarView. Design a responsive layout using Bootstrap 3 grid system with placeholder widgets for 'My Active Listings,' 'Transaction Pipeline,' and 'Upcoming Showings/Tasks.' Modify the main menu to prioritize Properties, Contacts, and Transactions modules. Create custom Smarty templates for the dashboard layout (custom/modules/Home/tpl/real-estate-hub.tpl). Set up the dashboard as the default landing page after login by modifying config_override.php. Include areas for quick-action buttons (add property, schedule showing, etc.). Create a toggle to switch between the custom dashboard and standard SuiteCRM home view.
+
+# Test Strategy:
+Verify the custom dashboard loads correctly after login. Test responsive behavior on different screen sizes. Confirm navigation menu changes are applied correctly. Test the toggle between custom and standard dashboards. Verify placeholder widgets display correctly before being populated with real data.
+
+# Subtasks:
+## 1. Develop Custom Controller and View for Real Estate Hub [pending]
+### Dependencies: None
+### Description: Create a custom controller (custom/modules/Home/controller.php) to override the default Home module controller and a custom view (custom/modules/Home/views/view.real-estate-hub.php) that extends SugarView for the Real Estate Hub dashboard.
+### Details:
+Implement the controller logic to route dashboard requests to the custom view. Ensure the view is structured to support dynamic widget loading and future extensibility.
+
+## 2. Design Responsive Dashboard Layout with Bootstrap 3 [pending]
+### Dependencies: 8.1
+### Description: Design a responsive dashboard layout using the Bootstrap 3 grid system, including placeholder widgets for 'My Active Listings,' 'Transaction Pipeline,' and 'Upcoming Showings/Tasks.'
+### Details:
+Structure the dashboard with rows and columns to accommodate widgets. Use Bootstrap classes to ensure responsiveness across devices. Insert placeholder content for each widget area.
+
+## 3. Create Custom Smarty Templates for Dashboard [pending]
+### Dependencies: 8.2
+### Description: Develop custom Smarty templates (custom/modules/Home/tpl/real-estate-hub.tpl) to define the dashboard's visual structure and integrate with the custom view.
+### Details:
+Implement Smarty template logic to render the Bootstrap-based layout and placeholder widgets. Ensure templates are modular for future widget integration.
+
+## 4. Modify Main Menu and Implement Dashboard Toggle [pending]
+### Dependencies: 8.1
+### Description: Update the main menu to prioritize Properties, Contacts, and Transactions modules, and implement a toggle to switch between the custom dashboard and the standard SuiteCRM home view.
+### Details:
+Edit menu metadata to reorder modules. Add a toggle button or menu item that allows users to switch between the Real Estate Hub and the default dashboard.
+
+## 5. Set Dashboard as Default Landing Page and Add Quick-Action Areas [pending]
+### Dependencies: 8.3, 8.4
+### Description: Configure the dashboard as the default landing page after login by modifying config_override.php, and add areas for quick-action buttons (e.g., add property, schedule showing).
+### Details:
+Update configuration to redirect users to the custom dashboard upon login. Design and place quick-action button areas within the dashboard layout for common real estate tasks.
+

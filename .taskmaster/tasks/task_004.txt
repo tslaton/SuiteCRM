@@ -1,0 +1,43 @@
+# Task ID: 4
+# Title: Implement Commission Calculator Logic Hook
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Create a before_save Logic Hook on the Opportunities module to automatically calculate agent commissions when a deal is marked as closed.
+# Details:
+Create a custom Logic Hook in custom/modules/Opportunities/logic_hooks.php that triggers on before_save. Implement the hook function to check if sales_stage is changing to 'Closed Won' (or the renamed equivalent). When triggered, calculate the commission based on the amount field and a configurable commission rate (stored in config or as a user preference). Store the result in the custom commission_c field. Add configuration options in the admin panel to set default commission rates (e.g., 2.5% or 3%). Include logic to handle split commissions if needed. The hook should follow this pseudocode: if (bean.sales_stage == 'Closed Won' && bean.sales_stage_changed) { bean.commission_c = bean.amount * (bean.commission_rate / 100); }. Use SuiteCRM's BeanFactory to ensure proper saving.
+
+# Test Strategy:
+Test that commission is correctly calculated when a transaction is moved to Closed Won. Verify that changing other fields doesn't trigger recalculation. Test with different commission rates and transaction amounts. Verify the commission appears correctly on the detail view. Test edge cases like zero amount or null commission rate.
+
+# Subtasks:
+## 1. Register before_save Logic Hook for Opportunities [pending]
+### Dependencies: None
+### Description: Set up the logic_hooks.php file in custom/modules/Opportunities to register a before_save logic hook that will trigger custom commission calculation logic.
+### Details:
+Create or update custom/modules/Opportunities/logic_hooks.php to include an entry for the before_save event, specifying the order, description, file path, class, and method for the commission calculation logic.
+
+## 2. Implement Commission Calculation Logic [pending]
+### Dependencies: 4.1
+### Description: Develop the PHP class and method that performs commission calculation when the sales_stage changes to 'Closed Won'.
+### Details:
+Create the referenced PHP file and class. In the hook method, check if sales_stage is changing to 'Closed Won' (or equivalent). If so, calculate the commission using the amount and commission rate, and set the commission_c field.
+
+## 3. Add Configurable Commission Rate Management [pending]
+### Dependencies: 4.2
+### Description: Implement logic to retrieve the commission rate from configuration or user preferences, and provide admin UI for setting default rates.
+### Details:
+Store the commission rate in a config file or user preference. Add admin panel options to set and update the default commission rate (e.g., 2.5% or 3%). Ensure the logic hook retrieves the correct rate for each calculation.
+
+## 4. Implement Split Commission Handling [pending]
+### Dependencies: 4.3
+### Description: Extend the commission calculation logic to support split commissions among multiple agents if applicable.
+### Details:
+Modify the logic hook to detect and handle scenarios where commissions are split, distributing the calculated amount according to defined rules or fields.
+
+## 5. Validate and Test Commission Logic Hook Functionality [pending]
+### Dependencies: 4.4
+### Description: Perform comprehensive testing to ensure the logic hook works as intended, including edge cases and UI integration.
+### Details:
+Test commission calculation for various Opportunity scenarios, including different sales stages, amounts, commission rates, and split commissions. Verify that the commission_c field displays correctly in the detail view and that no unintended recalculations occur.
+

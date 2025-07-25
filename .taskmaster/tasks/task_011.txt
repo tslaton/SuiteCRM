@@ -1,0 +1,43 @@
+# Task ID: 11
+# Title: Implement Upcoming Showings/Tasks Widget
+# Status: pending
+# Dependencies: 1, 8
+# Priority: medium
+# Description: Create a widget for the Real Estate Hub that displays upcoming showings and important tasks.
+# Details:
+Create a custom dashlet class (custom/modules/Home/Dashlets/UpcomingDashlet/UpcomingDashlet.php) that extends DashletGeneric. Implement a query to fetch upcoming meetings (showings) and tasks due in the next 7 days. Create a Smarty template that displays these items in a timeline or list format. Group items by day (Today, Tomorrow, This Week). Include key details for each item (time, property/client, type). Add quick-action buttons to complete tasks or reschedule meetings. Implement color coding based on priority or proximity to due date. Add a 'View Calendar' link to the full calendar view. Include a count of overdue items with a warning indicator. Filter to focus on property showings and transaction-related tasks by default. Use this query pattern for meetings: SELECT m.id, m.name, m.date_start, m.status, p.name as property_name FROM meetings m LEFT JOIN meetings_properties_c mp ON m.id = mp.meeting_id LEFT JOIN properties p ON p.id = mp.property_id WHERE m.assigned_user_id = '{$current_user->id}' AND m.date_start > NOW() AND m.date_start < DATE_ADD(NOW(), INTERVAL 7 DAY) ORDER BY m.date_start ASC
+
+# Test Strategy:
+Test the widget with various combinations of upcoming meetings and tasks. Verify items are grouped correctly by day. Test quick-action buttons functionality. Verify overdue items are highlighted appropriately. Test with items that have and don't have related properties. Verify the 'View Calendar' link works correctly.
+
+# Subtasks:
+## 1. Develop Custom Dashlet Class for Upcoming Showings and Tasks [pending]
+### Dependencies: None
+### Description: Create the UpcomingDashlet class in custom/modules/Home/Dashlets/UpcomingDashlet/UpcomingDashlet.php, extending DashletGeneric to support upcoming showings and tasks.
+### Details:
+Set up the PHP class structure, initialize dashlet configuration, and ensure it can be added to dashboards. Prepare for data querying and template integration.
+
+## 2. Implement Data Queries for Upcoming Meetings and Tasks [pending]
+### Dependencies: 11.1
+### Description: Write queries to fetch upcoming meetings (showings) and tasks due in the next 7 days, filtered for property showings and transaction-related tasks.
+### Details:
+Use the provided SQL pattern for meetings and create a similar query for tasks. Ensure results include required fields (time, property/client, type) and filter by assigned user.
+
+## 3. Design Smarty Template for Timeline/List Display [pending]
+### Dependencies: 11.2
+### Description: Create a Smarty template to display upcoming items in a grouped timeline or list format, showing key details and grouping by day (Today, Tomorrow, This Week).
+### Details:
+Implement grouping logic, display item details, add color coding for priority/proximity, and include a count of overdue items with a warning indicator.
+
+## 4. Add Quick-Action Buttons and Calendar Integration [pending]
+### Dependencies: 11.3
+### Description: Implement quick-action buttons for completing tasks and rescheduling meetings, and add a 'View Calendar' link to the full calendar view.
+### Details:
+Ensure actions update records in real time and the calendar link navigates to the correct view. Handle UI feedback for actions.
+
+## 5. Implement Filtering, Default Focus, and Finalize Widget [pending]
+### Dependencies: 11.4
+### Description: Apply default filters to focus on property showings and transaction-related tasks, finalize dashlet configuration, and ensure all requirements are met.
+### Details:
+Review and refine filtering logic, confirm all display and interaction requirements, and prepare for deployment.
+

@@ -1,0 +1,43 @@
+# Task ID: 10
+# Title: Implement Transaction Pipeline Widget
+# Status: pending
+# Dependencies: 2, 5, 8
+# Priority: medium
+# Description: Create a widget for the Real Estate Hub that provides a summary view of the agent's transaction pipeline.
+# Details:
+Create a custom dashlet class (custom/modules/Home/Dashlets/PipelineDashlet/PipelineDashlet.php) that extends DashletGeneric. Implement a query to count transactions by stage and calculate total value for each stage. Create a Smarty template that displays a horizontal pipeline visualization with counts and values for each stage. Use Bootstrap progress bars or a simple chart library (Chart.js 2.9.x, compatible with SuiteCRM 7.x) to visualize the pipeline distribution. Include a summary of total pipeline value and count. Add a link to the full Kanban view of the pipeline. Implement a refresh button to update the data without reloading the page. Use color coding to highlight stages with high value or that require attention. The widget should be compact but informative, focusing on key metrics rather than individual transaction details.
+
+# Test Strategy:
+Test the widget with transactions in various stages. Verify counts and calculations are correct. Test the visualization with different distribution patterns. Verify the link to the Kanban view works correctly. Test the refresh functionality. Verify the widget updates when transactions change stages.
+
+# Subtasks:
+## 1. Develop Custom Dashlet Class for Pipeline Widget [pending]
+### Dependencies: None
+### Description: Create the PipelineDashlet class in custom/modules/Home/Dashlets/PipelineDashlet/PipelineDashlet.php, extending DashletGeneric, to serve as the backend logic for the transaction pipeline widget.
+### Details:
+Set up the PHP class structure, ensure it integrates with SuiteCRM's dashlet framework, and prepare for data querying and widget configuration.
+
+## 2. Implement Transaction Stage Query and Aggregation Logic [pending]
+### Dependencies: 10.1
+### Description: Develop logic within the dashlet class to query transactions, count them by stage, and calculate the total value for each stage.
+### Details:
+Write efficient SQL or ORM queries to fetch transaction data grouped by stage, and aggregate both count and value per stage for the current agent.
+
+## 3. Design and Implement Smarty Template for Visualization [pending]
+### Dependencies: 10.2
+### Description: Create a Smarty template to display a horizontal pipeline visualization, showing counts and values per stage, using Bootstrap progress bars or Chart.js 2.9.x.
+### Details:
+Develop a compact, visually clear template that highlights key metrics, uses color coding for high-value or attention-required stages, and includes a summary of total pipeline value and count.
+
+## 4. Add Interactive Features: Kanban Link and Refresh Button [pending]
+### Dependencies: 10.3
+### Description: Integrate a link to the full Kanban pipeline view and implement a refresh button that updates the widget data without reloading the page.
+### Details:
+Ensure the Kanban link navigates correctly and the refresh button triggers an AJAX call to reload data, maintaining the widget's compact layout.
+
+## 5. Finalize, Test, and Optimize Widget for Key Metrics [pending]
+### Dependencies: 10.4
+### Description: Conduct comprehensive testing, optimize performance, and ensure the widget focuses on summary metrics rather than individual transaction details.
+### Details:
+Test with transactions in various stages, validate calculations, check responsiveness, and confirm that the widget remains informative and compact.
+

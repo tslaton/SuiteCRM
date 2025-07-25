@@ -1,0 +1,43 @@
+# Task ID: 5
+# Title: Develop Transaction Pipeline Kanban View
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create a custom Kanban-style board view for the Transactions module to visualize the deal pipeline.
+# Details:
+Create a new view file custom/modules/Opportunities/views/view.kanban.php that extends SugarView. Implement a custom controller method to fetch transactions grouped by sales_stage. Create a Smarty template for the Kanban layout using Bootstrap 3 (compatible with SuiteCRM 7.x) for the column structure. Integrate jKanban (v1.0.0 or compatible version) for the interactive board functionality. Create a custom API endpoint (custom/modules/Opportunities/api/KanbanApi.php) to handle AJAX requests for updating transaction stages. Implement drag-and-drop functionality to move transactions between pipeline stages. Add a button in the Transactions module to switch between list view and Kanban view. Include summary statistics at the top of each column (count and total value). Style the cards to show key transaction information (property address, client name, amount, days in stage).
+
+# Test Strategy:
+Test loading the Kanban view with various numbers of transactions. Verify transactions appear in the correct pipeline stages. Test dragging transactions between stages and confirm the database is updated correctly. Test filtering and searching within the Kanban view. Verify performance with a large number of transactions. Test on different browsers and screen sizes.
+
+# Subtasks:
+## 1. Create Kanban View Controller and Data Fetching Logic [pending]
+### Dependencies: None
+### Description: Develop a new view file (custom/modules/Opportunities/views/view.kanban.php) extending SugarView, and implement a controller method to fetch transactions grouped by sales_stage.
+### Details:
+Set up the PHP controller to retrieve Opportunities records, grouping them by the sales_stage dropdown. Ensure the data structure supports Kanban columns and cards, and is optimized for AJAX consumption.
+
+## 2. Design Smarty Template and Bootstrap-Based Kanban Layout [pending]
+### Dependencies: 5.1
+### Description: Create a Smarty template for the Kanban board layout using Bootstrap 3 for responsive columns, ensuring compatibility with SuiteCRM 7.x.
+### Details:
+Implement the Kanban column structure in Smarty, dynamically generating columns for each sales_stage. Style cards to display property address, client name, amount, and days in stage. Add summary statistics (count and total value) at the top of each column.
+
+## 3. Integrate jKanban for Interactive Drag-and-Drop Functionality [pending]
+### Dependencies: 5.2
+### Description: Integrate jKanban (v1.0.0 or compatible) into the Kanban view to enable drag-and-drop movement of transaction cards between pipeline stages.
+### Details:
+Configure jKanban to recognize columns as sales stages and cards as transactions. Implement event handlers to trigger AJAX updates when cards are moved between columns.
+
+## 4. Develop Custom API Endpoint for Stage Updates [pending]
+### Dependencies: 5.3
+### Description: Create a custom API endpoint (custom/modules/Opportunities/api/KanbanApi.php) to handle AJAX requests for updating transaction sales_stage when cards are moved.
+### Details:
+Implement secure server-side logic to update the sales_stage field for a transaction when a card is moved. Return updated data for UI refresh and handle error cases gracefully.
+
+## 5. Add Kanban/List View Toggle and Final UI Enhancements [pending]
+### Dependencies: 5.4
+### Description: Add a button in the Transactions module to switch between list and Kanban views. Finalize card styling and ensure all UI elements are polished.
+### Details:
+Implement the toggle button in the module's toolbar. Refine card and column styles for clarity and usability. Ensure accessibility and responsive design.
+

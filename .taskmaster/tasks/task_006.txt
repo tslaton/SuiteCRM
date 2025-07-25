@@ -1,0 +1,43 @@
+# Task ID: 6
+# Title: Create Open House Management EntryPoint
+# Status: pending
+# Dependencies: 1
+# Priority: medium
+# Description: Develop a custom EntryPoint to provide a public-facing digital sign-in form for open houses that creates leads in the CRM.
+# Details:
+Create a new EntryPoint in custom/EntryPoint/OpenHouseSignIn.php registered in custom/Extension/application/Ext/EntryPointRegistry/OpenHouse.php. Design a mobile-friendly HTML form using Bootstrap that collects visitor information (name, email, phone, notes). Create a secure token system to associate the form with a specific property listing. Implement server-side validation for all form inputs. When submitted, create a new Lead record with a relationship to the property. Set the lead_source to 'Open House'. Send an email notification to the agent when a new lead signs in. Create a QR code generator that agents can use to create a property-specific sign-in link. Implement rate limiting to prevent form spam. The URL format should be: index.php?entryPoint=OpenHouseSignIn&property_id=XXX&token=YYY.
+
+# Test Strategy:
+Test form submission with valid and invalid data. Verify leads are created correctly with all submitted information. Test the relationship between leads and properties. Verify email notifications are sent to agents. Test the form on various mobile devices and browsers. Test security measures against common attacks (CSRF, XSS, SQL injection).
+
+# Subtasks:
+## 1. Develop and Register Custom EntryPoint [pending]
+### Dependencies: None
+### Description: Create a new EntryPoint file for the open house sign-in form and register it within the SuiteCRM EntryPoint registry.
+### Details:
+Implement custom/EntryPoint/OpenHouseSignIn.php and register it in custom/Extension/application/Ext/EntryPointRegistry/OpenHouse.php to enable public access to the sign-in form.
+
+## 2. Design Mobile-Friendly Sign-In Form [pending]
+### Dependencies: 6.1
+### Description: Build a responsive HTML form using Bootstrap to collect visitor information including name, email, phone, and notes.
+### Details:
+Ensure the form is optimized for mobile devices and provides a user-friendly interface for open house attendees.
+
+## 3. Implement Secure Token and Property Association [pending]
+### Dependencies: 6.2
+### Description: Create a secure token system to associate each sign-in form instance with a specific property listing.
+### Details:
+Generate and validate tokens to ensure each form submission is linked to the correct property and prevent unauthorized access.
+
+## 4. Handle Form Submission and Lead Creation [pending]
+### Dependencies: 6.3
+### Description: Process form submissions with server-side validation, create new Lead records in the CRM, relate them to the property, set lead_source to 'Open House', and send agent notifications.
+### Details:
+Validate all input fields, create the Lead record with the appropriate relationship, and trigger an email notification to the assigned agent.
+
+## 5. Integrate QR Code Generation and Rate Limiting [pending]
+### Dependencies: 6.4
+### Description: Develop a QR code generator for property-specific sign-in links and implement rate limiting to prevent spam submissions.
+### Details:
+Allow agents to generate QR codes for each property and enforce submission limits to protect against abuse.
+

@@ -1,0 +1,43 @@
+# Task ID: 2
+# Title: Rename Opportunities Module to Transactions
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Relabel the existing Opportunities module to 'Transactions' to better reflect real estate terminology.
+# Details:
+Modify the language files (en_us.lang.php) in the Opportunities module to change all instances of 'Opportunity' to 'Transaction'. Update the module's display name in modules/Opportunities/language/en_us.lang.php. Modify the module's metadata in modules/Opportunities/metadata/subpanels/ to reflect the new terminology. Add custom fields needed for real estate transactions if not already present. Ensure the sales_stage dropdown options are updated to match the Transaction Pipeline Stages: Inquiry, Showing, Offer Made, Under Contract, Inspection/Appraisal, Clear to Close, Closed. Add a custom field 'commission_c' (Currency) to store calculated commission values. Use Studio to make these changes where possible to ensure proper metadata updates.
+
+# Test Strategy:
+Verify all UI elements show 'Transaction' instead of 'Opportunity'. Test that existing opportunity records are accessible and functional under the new label. Confirm that reports and dashlets referencing opportunities still work correctly. Test that the new sales stages appear correctly in dropdowns and filters.
+
+# Subtasks:
+## 1. Update Module Display Name and Labels [pending]
+### Dependencies: None
+### Description: Change all visible references of 'Opportunities' to 'Transactions' throughout the CRM interface.
+### Details:
+Use the Admin panel's 'Rename Modules' or 'Module Names and Icons' feature to update both singular and plural labels for the Opportunities module. Ensure the new name appears in navigation, list views, and record views. Edit the en_us.lang.php language file in modules/Opportunities/language/ to replace all instances of 'Opportunity' with 'Transaction'.
+
+## 2. Update Module Metadata and Subpanel References [pending]
+### Dependencies: 2.1
+### Description: Modify metadata and subpanel configuration files to reflect the new terminology.
+### Details:
+Edit files in modules/Opportunities/metadata/subpanels/ to update labels and references from 'Opportunity' to 'Transaction'. Ensure subpanel titles, buttons, and related links use the new terminology.
+
+## 3. Update Field Labels and Dropdown Options [pending]
+### Dependencies: 2.1
+### Description: Change field labels and update the sales_stage dropdown to match real estate transaction stages.
+### Details:
+Use Studio to update field labels from 'Opportunity' to 'Transaction' where applicable. Modify the sales_stage dropdown options to: Inquiry, Showing, Offer Made, Under Contract, Inspection/Appraisal, Clear to Close, Closed.
+
+## 4. Add Custom Fields for Real Estate Transactions [pending]
+### Dependencies: 2.1
+### Description: Introduce any missing custom fields required for real estate, including commission tracking.
+### Details:
+Add custom fields such as 'commission_c' (Currency) and any other fields needed for real estate transactions using Studio. Ensure proper field configuration and placement in layouts.
+
+## 5. Validate Data Integrity and Module Functionality [pending]
+### Dependencies: 2.2, 2.3, 2.4
+### Description: Ensure all changes preserve existing data and module functionality.
+### Details:
+Test that existing opportunity records are accessible and correctly relabeled as transactions. Confirm that reports, dashlets, and integrations referencing opportunities continue to function. Validate that new sales stages and custom fields work as intended.
+

@@ -1,0 +1,43 @@
+# Task ID: 3
+# Title: Create Mock MLS Database
+# Status: pending
+# Dependencies: 1
+# Priority: medium
+# Description: Create and populate a mock MLS database table to support the CMA Generator feature.
+# Details:
+Create a new database table 'mock_mls_data' with fields matching the Properties module plus additional fields for comparable analysis (days on market, price per square foot, etc.). Create an installation script that populates this table with at least 100 sample properties across various neighborhoods, price points, and property types. Ensure data is realistic and varied enough to generate meaningful CMAs. Include fields for: property_id, address, city, state, zip, bedrooms, bathrooms, square_footage, lot_size, year_built, list_price, sold_price, days_on_market, listing_date, sold_date, property_type. Create a Bean class for this table to allow easy querying through SuiteCRM's ORM. Add indexes on commonly queried fields (zip, price range, bedrooms, bathrooms) for performance.
+
+# Test Strategy:
+Verify the table is created with all required fields. Confirm sample data is properly inserted. Test queries to retrieve comparable properties based on location, size, and price criteria. Validate that the data can be effectively used by the CMA Generator. Test performance of queries with different filter combinations.
+
+# Subtasks:
+## 1. Design Mock MLS Database Schema [pending]
+### Dependencies: None
+### Description: Define the structure of the 'mock_mls_data' table, ensuring all required fields for property and comparable analysis are included.
+### Details:
+List all necessary fields: property_id, address, city, state, zip, bedrooms, bathrooms, square_footage, lot_size, year_built, list_price, sold_price, days_on_market, listing_date, sold_date, property_type. Specify data types and constraints. Identify which fields require indexing for performance.
+
+## 2. Implement Database Table and Indexes [pending]
+### Dependencies: 3.1
+### Description: Create the 'mock_mls_data' table in the database according to the defined schema and add indexes on commonly queried fields.
+### Details:
+Write SQL or use SuiteCRM's vardefs to create the table. Add indexes on zip, price range, bedrooms, and bathrooms fields to optimize query performance.
+
+## 3. Develop Data Population Script [pending]
+### Dependencies: 3.2
+### Description: Create an installation script to populate the 'mock_mls_data' table with at least 100 realistic and varied sample property records.
+### Details:
+Generate sample data covering diverse neighborhoods, price points, and property types. Ensure data variation in days on market, price per square foot, and other key fields. Script should be idempotent and rerunnable.
+
+## 4. Create SuiteCRM Bean Class for Mock MLS Table [pending]
+### Dependencies: 3.2
+### Description: Develop a Bean class for the 'mock_mls_data' table to enable ORM-based querying within SuiteCRM.
+### Details:
+Define the Bean class with all fields mapped. Register the Bean in SuiteCRM so it can be used for data access and manipulation via SuiteCRM's ORM.
+
+## 5. Validate Data Usability and Performance [pending]
+### Dependencies: 3.3, 3.4
+### Description: Test the mock MLS data for compatibility with the CMA Generator and assess query performance on key fields.
+### Details:
+Execute sample CMA queries filtering by location, size, and price. Measure query response times and confirm that indexes improve performance. Ensure data supports meaningful CMA generation.
+
