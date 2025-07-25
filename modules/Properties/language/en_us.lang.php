@@ -42,6 +42,9 @@ $mod_strings = array(
     'LBL_ASSIGNED_TO_ID' => 'Assigned User Id',
     'LBL_ASSIGNED_TO_NAME' => 'Assigned to',
     
+    // Dashlet
+    'LBL_MY_PROPERTIES' => 'My Properties',
+    
     // Property specific fields
     'LBL_MLS_ID' => 'MLS ID',
     'LBL_STREET_ADDRESS' => 'Street Address',
