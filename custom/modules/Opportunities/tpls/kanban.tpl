@@ -4,22 +4,28 @@
  *}
 
 <div id="kanban-container">
-    {* Header with title and view toggle *}
+    {* Module Title *}
     <div class="moduleTitle">
-        <h2 style="display: inline-block;">
-            <a href="index.php?module=Opportunities&action=index">{$MOD.LBL_MODULE_NAME}</a>
-            <span class="pointer">»</span>
-            Pipeline View
+        <h2>
+            {$MOD.LBL_MODULE_NAME}
         </h2>
-        <div class="btn-group pull-right" style="margin-top: 10px;">
-            <a href="index.php?module=Opportunities&action=index" class="btn btn-default">
-                <span class="glyphicon glyphicon-list"></span> List View
-            </a>
-            <button class="btn btn-primary active" disabled>
-                <span class="glyphicon glyphicon-th"></span> Pipeline View
-            </button>
-        </div>
         <div class="clear"></div>
+    </div>
+    
+    {* Tab Navigation *}
+    <div id="EditView_tabs" style="margin-bottom: 20px;">
+        <ul class="nav nav-tabs">
+            <li role="presentation">
+                <a href="index.php?module=Opportunities&action=index">
+                    <span class="glyphicon glyphicon-list"></span> List View
+                </a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="index.php?module=Opportunities&action=kanban">
+                    <span class="glyphicon glyphicon-th"></span> Pipeline View
+                </a>
+            </li>
+        </ul>
     </div>
 
     
@@ -92,10 +98,53 @@
 {* CSS Styles *}
 <style>
 {literal}
+/* Tab Navigation Styles to match SuiteCRM */
+#EditView_tabs {
+    margin-bottom: 0;
+}
+
+#EditView_tabs .nav-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0;
+}
+
+#EditView_tabs .nav-tabs > li {
+    margin-bottom: -1px;
+}
+
+#EditView_tabs .nav-tabs > li > a {
+    color: #fff;
+    background-color: #777;
+    border: 1px solid #666;
+    border-radius: 4px 4px 0 0;
+    margin-right: 2px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+#EditView_tabs .nav-tabs > li > a:hover {
+    background-color: #666;
+    color: #fff;
+    text-decoration: none;
+}
+
+#EditView_tabs .nav-tabs > li.active > a,
+#EditView_tabs .nav-tabs > li.active > a:hover,
+#EditView_tabs .nav-tabs > li.active > a:focus {
+    color: #fff;
+    background-color: #534d64;
+    border: 1px solid #534d64;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+
 .kanban-board {
     overflow-x: auto;
     padding: 15px;
     background-color: #f5f5f5;
+    margin-top: -1px;
+    border: 1px solid #ddd;
+    border-top: none;
 }
 
 .kanban-column {

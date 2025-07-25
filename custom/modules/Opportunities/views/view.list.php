@@ -14,37 +14,74 @@ class CustomOpportunitiesViewList extends OpportunitiesViewList
 {
     public function display()
     {
-        // Add custom JavaScript to inject the Pipeline View button
+        
         echo <<<EOD
+<style type="text/css">
+/* Tab Navigation Styles to match SuiteCRM */
+#EditView_tabs {
+    margin-bottom: 10px;
+}
+
+#EditView_tabs .nav-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0;
+}
+
+#EditView_tabs .nav-tabs > li {
+    margin-bottom: -1px;
+}
+
+#EditView_tabs .nav-tabs > li > a {
+    color: #fff;
+    background-color: #777;
+    border: 1px solid #666;
+    border-radius: 4px 4px 0 0;
+    margin-right: 2px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+#EditView_tabs .nav-tabs > li > a:hover {
+    background-color: #666;
+    color: #fff;
+    text-decoration: none;
+}
+
+#EditView_tabs .nav-tabs > li.active > a,
+#EditView_tabs .nav-tabs > li.active > a:hover,
+#EditView_tabs .nav-tabs > li.active > a:focus {
+    color: #fff;
+    background-color: #534d64;
+    border: 1px solid #534d64;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
-    // Add Pipeline View button to the action menu
-    var pipelineButton = '<div class="btn-group" style="margin-left: 10px; display: inline-block;">' +
-        '<button class="btn btn-default" onclick="window.location.href=\'index.php?module=Opportunities&action=index\';" disabled>' +
+    // Create tab navigation HTML
+    var tabNavigation = '<div id="EditView_tabs" style="margin-top: 10px;">' +
+        '<ul class="nav nav-tabs">' +
+        '<li role="presentation" class="active">' +
+        '<a href="index.php?module=Opportunities&action=index">' +
         '<span class="glyphicon glyphicon-list"></span> List View' +
-        '</button>' +
-        '<a href="index.php?module=Opportunities&action=kanban" class="btn btn-primary">' +
+        '</a>' +
+        '</li>' +
+        '<li role="presentation">' +
+        '<a href="index.php?module=Opportunities&action=kanban">' +
         '<span class="glyphicon glyphicon-th"></span> Pipeline View' +
         '</a>' +
+        '</li>' +
+        '</ul>' +
+        '<div class="clearfix"></div>' +
         '</div>';
     
-    // Try multiple possible locations for the button
-    if ($('.module-title-text').length > 0) {
-        // SuiteCRM 7.x with module title
-        $('.module-title-text').parent().append(pipelineButton);
-    } else if ($('.moduleTitle h2').length > 0) {
-        // Older style module title
-        $('.moduleTitle h2').append(pipelineButton);
-    } else if ($('div.action_buttons').length > 0) {
-        // In the action buttons area
-        $('div.action_buttons').prepend(pipelineButton);
+    // Insert after the module title
+    if ($('.moduleTitle').length > 0) {
+        $('.moduleTitle').after(tabNavigation);
     } else {
-        // Fallback: Add after the search form
-        setTimeout(function() {
-            if ($('#searchform').length > 0) {
-                $('#searchform').after('<div style="margin: 10px 0;">' + pipelineButton.replace('margin-left: 10px;', '') + '</div>');
-            }
-        }, 500);
+        // Fallback: prepend to the main content area
+        $('#content').prepend(tabNavigation);
     }
 });
 </script>
