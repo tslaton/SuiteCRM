@@ -9,7 +9,7 @@
         "testStrategy": "Test CRUD operations for property records. Verify all fields save and display correctly. Test relationships with Contacts and Opportunities. Ensure list views filter and sort properly. Validate that image uploads for property photos work correctly. Test ACL permissions for different user roles.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,7 +17,7 @@
             "description": "Use SuiteCRM's Module Builder to create the foundational 'Properties' module, ensuring it extends the SugarBean class.",
             "dependencies": [],
             "details": "Initiate a new module named 'Properties' via Module Builder. Configure it to extend SugarBean, setting up the basic module structure and files required for further customization.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the module appears in the admin panel and can be deployed without errors. Confirm that the generated files follow SuiteCRM 7.x conventions."
           },
           {
@@ -28,7 +28,7 @@
               "1.1"
             ],
             "details": "Add fields: MLS ID, Street Address, City, State (Dropdown), Zip Code, Price (Currency), Status (Dropdown: Active, Pending, Sold), Bedrooms (Int), Bathrooms (Decimal), Square Footage (Int), Description (Text Area), Main Photo (Image) in the module's vardefs.php and ensure the table is created accordingly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run Quick Repair and Rebuild. Check that all fields exist in the database and can be saved and retrieved via the module."
           },
           {
@@ -39,7 +39,7 @@
               "1.2"
             ],
             "details": "Use vardefs.php and relationship metadata to establish many-to-many or one-to-many relationships as appropriate. Ensure Opportunities are relabeled as Transactions throughout the module.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create and link records between Properties, Contacts, and Transactions. Verify relationships display correctly in subpanels and can be navigated bidirectionally."
           },
           {
@@ -50,7 +50,7 @@
               "1.2"
             ],
             "details": "Implement view.list.php, view.detail.php, and view.edit.php for the module. Ensure all fields are displayed and editable as required, and that image upload for Main Photo is supported.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test each view for correct field rendering, data entry, and image upload. Confirm navigation between views and proper display of related records."
           },
           {
@@ -61,7 +61,7 @@
               "1.1"
             ],
             "details": "Define ACL roles and permissions for the module, ensuring only authorized users can view, edit, or delete property records. Integrate with SuiteCRM's ACL framework.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test CRUD operations with users of different roles. Verify that permissions are enforced for all module actions and views."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-25T15:07:18.741Z",
+      "updated": "2025-07-25T17:01:26.658Z",
       "description": "Tasks for master context"
     }
   }
