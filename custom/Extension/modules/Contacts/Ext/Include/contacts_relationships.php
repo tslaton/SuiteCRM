@@ -3,7 +3,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-// Include custom relationship metadata files
+// Include contacts relationship metadata when in Contacts module
 if (file_exists('custom/metadata/properties_contacts_rolesMetaData.php')) {
     require_once('custom/metadata/properties_contacts_rolesMetaData.php');
 }
