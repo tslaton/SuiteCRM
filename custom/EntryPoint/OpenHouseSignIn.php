@@ -81,10 +81,10 @@ class OpenHouseSignIn
     private function showForm()
     {
         $property_name = $this->property->name;
-        $property_address = $this->property->address_street . ', ' . 
-                           $this->property->address_city . ', ' . 
-                           $this->property->address_state . ' ' . 
-                           $this->property->address_postalcode;
+        $property_address = $this->property->street_address . ', ' . 
+                           $this->property->city . ', ' . 
+                           $this->property->state . ' ' . 
+                           $this->property->zip_code;
         
         ?>
 <!DOCTYPE html>
@@ -167,7 +167,9 @@ class OpenHouseSignIn
             <div class="property-header">
                 <h1>Welcome to the Open House</h1>
                 <div class="property-address">
-                    <strong><?php echo htmlspecialchars($property_name); ?></strong><br>
+                    <?php if (!empty($property_name)): ?>
+                        <strong><?php echo htmlspecialchars($property_name); ?></strong><br>
+                    <?php endif; ?>
                     <?php echo htmlspecialchars($property_address); ?>
                 </div>
             </div>
@@ -461,10 +463,10 @@ class OpenHouseSignIn
                 
                 <div class="property-info">
                     <h4><?php echo htmlspecialchars($this->property->name); ?></h4>
-                    <p><?php echo htmlspecialchars($this->property->address_street . ', ' . 
-                                                  $this->property->address_city . ', ' . 
-                                                  $this->property->address_state . ' ' . 
-                                                  $this->property->address_postalcode); ?></p>
+                    <p><?php echo htmlspecialchars($this->property->street_address . ', ' . 
+                                                  $this->property->city . ', ' . 
+                                                  $this->property->state . ' ' . 
+                                                  $this->property->zip_code); ?></p>
                 </div>
                 
                 <p style="margin-top: 30px;">
