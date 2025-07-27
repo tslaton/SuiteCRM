@@ -5,16 +5,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $layout_defs;
 
-// Property subpanel
-$layout_defs['Opportunities']['subpanel_setup']['property'] = array(
-    'order' => 50,
-    'module' => 'Properties',
-    'subpanel_name' => 'ForTransactionSingle',
-    'title_key' => 'LBL_PROPERTY_SUBPANEL_TITLE',
-    'get_subpanel_data' => 'property',
-);
-
-// Contacts subpanel with roles
+// Contacts subpanel with roles (1st position)
 $layout_defs['Opportunities']['subpanel_setup']['contacts_roles'] = array(
     'order' => 100,
     'module' => 'Contacts',
@@ -33,3 +24,17 @@ $layout_defs['Opportunities']['subpanel_setup']['contacts_roles'] = array(
         ),
     ),
 );
+
+// Remove the documents subpanel - not needed on transaction details page
+
+// Remove all default subpanels except the ones we want
+unset($layout_defs['Opportunities']['subpanel_setup']['property']);
+unset($layout_defs['Opportunities']['subpanel_setup']['documents']);
+unset($layout_defs['Opportunities']['subpanel_setup']['activities']);
+unset($layout_defs['Opportunities']['subpanel_setup']['history']);
+unset($layout_defs['Opportunities']['subpanel_setup']['leads']);
+unset($layout_defs['Opportunities']['subpanel_setup']['contacts']);
+unset($layout_defs['Opportunities']['subpanel_setup']['project']);
+unset($layout_defs['Opportunities']['subpanel_setup']['opportunity_aos_quotes']);
+unset($layout_defs['Opportunities']['subpanel_setup']['opportunities_aos_contracts']);
+unset($layout_defs['Opportunities']['subpanel_setup']['securitygroups']);
