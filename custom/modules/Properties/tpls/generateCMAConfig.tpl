@@ -9,7 +9,7 @@
     <input type="hidden" name="record" value="{$property->id}">
     <input type="hidden" name="generate" value="1">
     
-    <div class="edit view edit508">
+    <div class="edit view edit508" style="padding: 20px;">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="edit view">
             <tr>
                 <th colspan="4" align="left">
@@ -89,7 +89,7 @@
             </tr>
         </table>
         
-        <div class="buttons" style="margin-top: 20px;">
+        <div class="buttons" style="margin-top: 20px; padding-top: 10px;">
             <input type="submit" value="Generate CMA" class="button primary">
             <input type="button" value="Cancel" class="button" onclick="window.location.href='index.php?module=Properties&action=DetailView&record={$property->id}';">
         </div>
