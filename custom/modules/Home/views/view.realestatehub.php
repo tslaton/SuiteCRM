@@ -159,6 +159,7 @@ class HomeViewRealEstateHub extends SugarView
                 $row['square_footage'] = $prop->square_footage;
                 $row['property_type'] = $prop->property_type;
                 $row['listing_date'] = $prop->listing_date;
+                $row['main_photo'] = $prop->main_photo;
                 
                 // Format price
                 if (!empty($row['price'])) {

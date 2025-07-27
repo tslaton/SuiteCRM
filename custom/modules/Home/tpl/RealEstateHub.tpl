@@ -97,71 +97,141 @@
     }
     
     .property-card {
-        flex: 0 0 280px;
+        flex: 0 0 240px;
         background: #fff;
         border: 1px solid #e0e0e0;
-        border-radius: 4px;
+        border-radius: 6px;
         overflow: hidden;
         cursor: pointer;
         transition: all 0.3s;
         text-decoration: none;
         color: inherit;
+        display: flex;
+        flex-direction: column;
     }
     
     .property-card:hover {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         transform: translateY(-2px);
         text-decoration: none;
         color: inherit;
     }
     
-    .property-card-header {
+    .property-card-image {
+        width: 100%;
+        height: 160px;
+        background: #f5f5f5;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .property-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .property-card-no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         background: #f8f8f8;
-        padding: 15px;
-        border-bottom: 1px solid #e0e0e0;
+        color: #999;
+    }
+    
+    .property-card-no-image i {
+        font-size: 48px;
+        margin-bottom: 8px;
+        color: #ddd;
+    }
+    
+    .property-card-no-image span {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    .property-card-header {
+        background: #fff;
+        padding: 10px 12px 8px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .property-card-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 4px;
+    }
+    
+    .property-card-address-short {
+        font-size: 14px;
+        font-weight: 500;
+        color: #534d64;
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 8px;
     }
     
     .property-card-price {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
-        color: #534d64;
+        color: #aa9dcc;
         margin: 0;
+        white-space: nowrap;
     }
     
-    .property-card-mls {
+    .property-card-city {
         font-size: 12px;
-        color: #999;
-        margin-top: 5px;
+        color: #888;
     }
     
     .property-card-body {
-        padding: 15px;
-    }
-    
-    .property-card-address {
-        font-weight: 500;
-        color: #534d64;
-        margin-bottom: 10px;
+        padding: 8px 12px 10px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
     
     .property-card-details {
         display: flex;
-        gap: 15px;
+        gap: 12px;
         color: #666;
-        font-size: 14px;
-        margin-bottom: 10px;
+        font-size: 13px;
+        margin-bottom: 6px;
     }
     
     .property-card-detail {
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
+    }
+    
+    .property-card-detail i {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    .property-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: #999;
+        margin-top: auto;
+        padding-top: 6px;
+    }
+    
+    .property-card-mls {
+        font-size: 11px;
+        color: #999;
     }
     
     .property-card-date {
-        font-size: 12px;
+        font-size: 11px;
         color: #999;
-        margin-top: 10px;
     }
     
     .property-no-listings {
@@ -468,40 +538,54 @@
                         <div class="property-listings">
                             {foreach from=$dashboardData.widgets.active_listings.properties item=property}
                                 <a href="index.php?module=Properties&action=DetailView&record={$property.id}" class="property-card">
+                                    <div class="property-card-image">
+                                        {if $property.main_photo}
+                                            <img src="{$property.main_photo}" alt="{$property.street_address}" />
+                                        {else}
+                                            <div class="property-card-no-image">
+                                                <i class="glyphicon glyphicon-home"></i>
+                                                <span>No cover photo</span>
+                                            </div>
+                                        {/if}
+                                    </div>
                                     <div class="property-card-header">
-                                        <p class="property-card-price">{$property.formatted_price}</p>
-                                        <p class="property-card-mls">MLS# {$property.mls_id}</p>
+                                        <div class="property-card-header-top">
+                                            <div class="property-card-address-short">
+                                                {$property.street_address}
+                                            </div>
+                                            <p class="property-card-price">{$property.formatted_price}</p>
+                                        </div>
+                                        <div class="property-card-city">
+                                            {$property.city}, {$property.state}
+                                        </div>
                                     </div>
                                     <div class="property-card-body">
-                                        <div class="property-card-address">
-                                            {$property.street_address}<br>
-                                            {$property.city}, {$property.state} {$property.zip_code}
-                                        </div>
                                         <div class="property-card-details">
                                             {if $property.bedrooms}
                                                 <div class="property-card-detail">
                                                     <i class="glyphicon glyphicon-bed"></i>
-                                                    <span>{$property.bedrooms} Beds</span>
+                                                    <span>{$property.bedrooms}</span>
                                                 </div>
                                             {/if}
                                             {if $property.bathrooms}
                                                 <div class="property-card-detail">
                                                     <i class="glyphicon glyphicon-tint"></i>
-                                                    <span>{$property.bathrooms} Baths</span>
+                                                    <span>{$property.bathrooms}</span>
                                                 </div>
                                             {/if}
                                             {if $property.square_footage}
                                                 <div class="property-card-detail">
                                                     <i class="glyphicon glyphicon-home"></i>
-                                                    <span>{$property.square_footage|number_format} sqft</span>
+                                                    <span>{$property.square_footage|number_format}</span>
                                                 </div>
                                             {/if}
                                         </div>
-                                        {if $property.formatted_listing_date}
-                                            <div class="property-card-date">
-                                                Listed: {$property.formatted_listing_date}
-                                            </div>
-                                        {/if}
+                                        <div class="property-card-footer">
+                                            <span class="property-card-mls">MLS# {$property.mls_id}</span>
+                                            {if $property.formatted_listing_date}
+                                                <span class="property-card-date">{$property.formatted_listing_date}</span>
+                                            {/if}
+                                        </div>
                                     </div>
                                 </a>
                             {/foreach}
