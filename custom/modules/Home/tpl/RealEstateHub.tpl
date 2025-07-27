@@ -170,6 +170,103 @@
         padding: 40px;
     }
     
+    /* Transaction Pipeline styles */
+    .pipeline-container {
+        padding: 0;
+    }
+    
+    .pipeline-summary {
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .pipeline-summary h3 {
+        margin: 0 0 5px 0;
+        font-size: 24px;
+        color: #534d64;
+    }
+    
+    .pipeline-summary p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .pipeline-stages {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .pipeline-stage {
+        flex: 1;
+        min-width: 120px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 15px 10px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    
+    .pipeline-stage:hover {
+        border-color: #aa9dcc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .pipeline-stage-name {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pipeline-stage-count {
+        font-size: 24px;
+        font-weight: 600;
+        color: #534d64;
+        margin-bottom: 5px;
+    }
+    
+    .pipeline-stage-amount {
+        font-size: 14px;
+        color: #aa9dcc;
+        font-weight: 500;
+    }
+    
+    .pipeline-stage-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #aa9dcc;
+        border-radius: 0 0 3px 3px;
+        transition: height 0.3s;
+    }
+    
+    .pipeline-stage:hover .pipeline-stage-bar {
+        height: 6px;
+    }
+    
+    .pipeline-no-data {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+        padding: 40px;
+    }
+    
     .real-estate-hub .dashboard-header {
         margin-bottom: 30px;
         display: flex;
@@ -298,7 +395,32 @@
                     <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
                 </div>
                 <div class="widget-body">
-                    {$dashboardData.widgets.transaction_pipeline.placeholder}
+                    {if $dashboardData.widgets.transaction_pipeline.pipeline.total_count > 0}
+                        <div class="pipeline-container">
+                            <div class="pipeline-summary">
+                                <h3>{$dashboardData.widgets.transaction_pipeline.pipeline.formatted_total_amount}</h3>
+                                <p>Total Pipeline Value ({$dashboardData.widgets.transaction_pipeline.pipeline.total_count} opportunities)</p>
+                            </div>
+                            <div class="pipeline-stages">
+                                {foreach from=$dashboardData.widgets.transaction_pipeline.pipeline.stages item=stage}
+                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&sales_stage={$stage.stage|urlencode}'">
+                                        <div class="pipeline-stage-name">{$stage.label}</div>
+                                        <div class="pipeline-stage-count">{$stage.count}</div>
+                                        <div class="pipeline-stage-amount">{$stage.formatted_amount}</div>
+                                        {if $dashboardData.widgets.transaction_pipeline.pipeline.total_amount > 0}
+                                            <div class="pipeline-stage-bar" style="width: {($stage.amount / $dashboardData.widgets.transaction_pipeline.pipeline.total_amount * 100)|string_format:"%.0f"}%"></div>
+                                        {/if}
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    {else}
+                        <div class="pipeline-no-data">
+                            <i class="glyphicon glyphicon-stats" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                            <p>No active opportunities in the pipeline</p>
+                            <a href="index.php?module=Opportunities&action=EditView" class="btn btn-primary">Create New Opportunity</a>
+                        </div>
+                    {/if}
                 </div>
             </div>
             

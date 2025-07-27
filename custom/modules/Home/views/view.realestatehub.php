@@ -31,6 +31,9 @@ class HomeViewRealEstateHub extends SugarView
         // Debug: Log the number of properties found
         $GLOBALS['log']->debug("Real Estate Hub Display - Properties count: " . count($activeProperties));
         
+        // Fetch transaction pipeline data
+        $pipelineData = $this->getTransactionPipeline($current_user->id);
+        
         // Initialize dashboard data structure
         $dashboardData = array(
             'widgets' => array(
@@ -49,7 +52,8 @@ class HomeViewRealEstateHub extends SugarView
                     'placeholder' => 'Transaction pipeline visualization will be displayed here',
                     'col' => 2,
                     'row' => 1,
-                    'size' => 'medium'
+                    'size' => 'medium',
+                    'pipeline' => $pipelineData
                 ),
                 'upcoming_showings' => array(
                     'title' => 'Upcoming Showings/Tasks',
@@ -181,5 +185,75 @@ class HomeViewRealEstateHub extends SugarView
         });
         
         return $properties;
+    }
+    
+    /**
+     * Get transaction pipeline data for a user
+     * @param string $userId
+     * @return array
+     */
+    private function getTransactionPipeline($userId)
+    {
+        global $db, $app_list_strings;
+        
+        $pipeline = array();
+        
+        // Get sales stages from the app list strings
+        $sales_stages = isset($app_list_strings['sales_stage_dom']) ? $app_list_strings['sales_stage_dom'] : array();
+        
+        // Query to get opportunities grouped by sales stage - only stages that have data
+        // Include all opportunities that are not closed (sales_stage not starting with 'Closed')
+        $sql = "SELECT 
+                    o.sales_stage,
+                    COUNT(*) as count,
+                    SUM(o.amount) as total_amount
+                FROM opportunities o
+                WHERE o.deleted = 0
+                AND o.sales_stage NOT LIKE 'Closed%'
+                GROUP BY o.sales_stage
+                ORDER BY 
+                    CASE 
+                        WHEN o.sales_stage = 'Prospecting' THEN 1
+                        WHEN o.sales_stage = 'Qualification' THEN 2
+                        WHEN o.sales_stage = 'Needs Analysis' THEN 3
+                        WHEN o.sales_stage = 'Value Proposition' THEN 4
+                        WHEN o.sales_stage = 'Id. Decision Makers' THEN 5
+                        WHEN o.sales_stage = 'Perception Analysis' THEN 6
+                        WHEN o.sales_stage = 'Proposal/Price Quote' THEN 7
+                        WHEN o.sales_stage = 'Negotiation/Review' THEN 8
+                        ELSE 9
+                    END";
+        
+        $result = $db->query($sql);
+        
+        // Only create pipeline entries for stages that actually have data
+        while ($row = $db->fetchByAssoc($result)) {
+            $stage = $row['sales_stage'];
+            // Use the label from app_list_strings if available, otherwise use the stage name
+            $label = isset($sales_stages[$stage]) ? $sales_stages[$stage] : $stage;
+            
+            $pipeline[$stage] = array(
+                'stage' => $stage,
+                'label' => $label,
+                'count' => (int)$row['count'],
+                'amount' => (float)$row['total_amount'],
+                'formatted_amount' => '$' . number_format($row['total_amount'], 0)
+            );
+        }
+        
+        // Calculate total pipeline value
+        $total_count = 0;
+        $total_amount = 0;
+        foreach ($pipeline as $stage) {
+            $total_count += $stage['count'];
+            $total_amount += $stage['amount'];
+        }
+        
+        return array(
+            'stages' => array_values($pipeline),
+            'total_count' => $total_count,
+            'total_amount' => $total_amount,
+            'formatted_total_amount' => '$' . number_format($total_amount, 0)
+        );
     }
 }
