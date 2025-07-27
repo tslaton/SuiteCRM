@@ -44,9 +44,8 @@
     }
     
     .real-estate-hub .widget-body.large {
-        min-height: 300px;
-        overflow-x: auto;
-        overflow-y: hidden;
+        min-height: 200px;
+        padding: 0;
     }
     
     .real-estate-hub .quick-actions {
@@ -91,8 +90,10 @@
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
-        padding: 0;
+        padding: 20px;
         min-height: auto;
+        max-height: 715px;
+        overflow-y: auto;
     }
     
     .property-card {
@@ -560,7 +561,7 @@
                         <div class="pipeline-container">
                             <div class="pipeline-stages">
                                 {foreach from=$dashboardData.widgets.transaction_pipeline.pipeline.stages item=stage}
-                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&query=true&sales_stage_advanced[]={$stage.stage|urlencode}'">
+                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&query=true&sales_stage_advanced[]={$stage.stage|escape:'url'}'">
                                         <div class="pipeline-stage-name">{$stage.label}</div>
                                         <div class="pipeline-stage-count">{$stage.count}</div>
                                         <div class="pipeline-stage-amount">{$stage.formatted_amount}</div>
