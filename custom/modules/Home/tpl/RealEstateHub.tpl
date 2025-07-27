@@ -173,40 +173,19 @@
     /* Transaction Pipeline styles */
     .pipeline-container {
         padding: 0;
-    }
-    
-    .pipeline-summary {
-        background: #f8f8f8;
-        padding: 15px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-    
-    .pipeline-summary h3 {
-        margin: 0 0 5px 0;
-        font-size: 24px;
-        color: #534d64;
-    }
-    
-    .pipeline-summary p {
-        margin: 0;
-        color: #666;
-        font-size: 14px;
+        width: 100%;
     }
     
     .pipeline-stages {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 20px;
-        overflow-x: auto;
-        padding-bottom: 10px;
+        padding: 0;
     }
     
     .pipeline-stage {
-        flex: 1;
-        min-width: 120px;
+        flex: 1 1 140px;
+        max-width: 200px;
         background: #fff;
         border: 1px solid #e0e0e0;
         border-radius: 4px;
@@ -310,6 +289,24 @@
             align-items: flex-start;
             gap: 15px;
         }
+        
+        .pipeline-stage {
+            flex: 1 1 100%;
+            max-width: none;
+        }
+    }
+    
+    @media (max-width: 1200px) {
+        .real-estate-hub .widget-header span {
+            font-size: 14px;
+        }
+        
+        .real-estate-hub .widget-header span span {
+            display: block;
+            margin-left: 0 !important;
+            margin-top: 5px;
+            font-size: 12px;
+        }
     }
 </style>
 {/literal}
@@ -329,7 +326,15 @@
         <div class="col-md-6">
             <div class="widget-container">
                 <div class="widget-header">
-                    <span><i class="glyphicon glyphicon-home"></i>{$dashboardData.widgets.active_listings.title}</span>
+                    <span>
+                        <i class="glyphicon glyphicon-home"></i>
+                        {$dashboardData.widgets.active_listings.title}
+                        {if $dashboardData.widgets.active_listings.properties|@count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.active_listings.formatted_total_value} • {$dashboardData.widgets.active_listings.properties|@count} {if $dashboardData.widgets.active_listings.properties|@count == 1}listing{else}listings{/if}
+                            </span>
+                        {/if}
+                    </span>
                     <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
                 </div>
                 <div class="widget-body large">
@@ -391,16 +396,20 @@
             {* Transaction Pipeline Widget *}
             <div class="widget-container">
                 <div class="widget-header">
-                    <span><i class="glyphicon glyphicon-stats"></i>{$dashboardData.widgets.transaction_pipeline.title}</span>
+                    <span>
+                        <i class="glyphicon glyphicon-stats"></i>
+                        {$dashboardData.widgets.transaction_pipeline.title}
+                        {if $dashboardData.widgets.transaction_pipeline.pipeline.total_count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.transaction_pipeline.pipeline.formatted_total_amount} • {$dashboardData.widgets.transaction_pipeline.pipeline.total_count} deals
+                            </span>
+                        {/if}
+                    </span>
                     <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
                 </div>
                 <div class="widget-body">
                     {if $dashboardData.widgets.transaction_pipeline.pipeline.total_count > 0}
                         <div class="pipeline-container">
-                            <div class="pipeline-summary">
-                                <h3>{$dashboardData.widgets.transaction_pipeline.pipeline.formatted_total_amount}</h3>
-                                <p>Total Pipeline Value ({$dashboardData.widgets.transaction_pipeline.pipeline.total_count} opportunities)</p>
-                            </div>
                             <div class="pipeline-stages">
                                 {foreach from=$dashboardData.widgets.transaction_pipeline.pipeline.stages item=stage}
                                     <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&sales_stage={$stage.stage|urlencode}'">

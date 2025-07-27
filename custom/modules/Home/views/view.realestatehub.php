@@ -44,7 +44,9 @@ class HomeViewRealEstateHub extends SugarView
                     'col' => 1,
                     'row' => 1,
                     'size' => 'large',
-                    'properties' => $activeProperties
+                    'properties' => $activeProperties['properties'],
+                    'total_value' => $activeProperties['total_value'],
+                    'formatted_total_value' => $activeProperties['formatted_total_value']
                 ),
                 'transaction_pipeline' => array(
                     'title' => 'Transaction Pipeline',
@@ -184,7 +186,17 @@ class HomeViewRealEstateHub extends SugarView
             return $priceB - $priceA; // Descending order
         });
         
-        return $properties;
+        // Calculate total value of all properties
+        $total_value = 0;
+        foreach ($properties as $property) {
+            $total_value += floatval($property['price']);
+        }
+        
+        return array(
+            'properties' => $properties,
+            'total_value' => $total_value,
+            'formatted_total_value' => '$' . number_format($total_value, 0)
+        );
     }
     
     /**
@@ -249,8 +261,27 @@ class HomeViewRealEstateHub extends SugarView
             $total_amount += $stage['amount'];
         }
         
+        // Define logical order for real estate transaction stages
+        $stage_order = array(
+            'Inquiry' => 1,
+            'Showing' => 2,
+            'Offer Made' => 3,
+            'Under Contract' => 4,
+            'Inspection/Appraisal' => 5,
+            'Clear to Close' => 6,
+            'Closed' => 7
+        );
+        
+        // Sort pipeline stages by logical order
+        $sorted_pipeline = array_values($pipeline);
+        usort($sorted_pipeline, function($a, $b) use ($stage_order) {
+            $order_a = isset($stage_order[$a['stage']]) ? $stage_order[$a['stage']] : 999;
+            $order_b = isset($stage_order[$b['stage']]) ? $stage_order[$b['stage']] : 999;
+            return $order_a - $order_b;
+        });
+        
         return array(
-            'stages' => array_values($pipeline),
+            'stages' => $sorted_pipeline,
             'total_count' => $total_count,
             'total_amount' => $total_amount,
             'formatted_total_amount' => '$' . number_format($total_amount, 0)
