@@ -15,6 +15,9 @@ $mod_strings = array(
     'LBL_ACTIVITIES_SUBPANEL_TITLE' => 'Activities',
     'LBL_PROPERTIES_SUBPANEL_TITLE' => 'Properties',
     'LBL_NEW_FORM_TITLE' => 'New Property',
+    'LBL_CONTACTS_SUBPANEL_TITLE' => 'Related Contacts',
+    'LBL_TRANSACTIONS_SUBPANEL_TITLE' => 'Related Transactions',
+    'LBL_DOCUMENTS_SUBPANEL_TITLE' => 'Documents & CMAs',
     'LBL_REMOVE' => 'Remove',
     
     // Fields

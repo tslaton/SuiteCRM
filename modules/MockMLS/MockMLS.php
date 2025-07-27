@@ -51,7 +51,7 @@ class MockMLS extends Basic
      * 
      * @param array $criteria Search criteria including location, size, price range
      * @param int $limit Maximum number of results
-     * @return array Array of comparable properties
+     * @return array Array with 'properties' and 'used_fallback' flag
      */
     public function findComparables($criteria, $limit = 10)
     {
@@ -59,6 +59,7 @@ class MockMLS extends Basic
         
         $where_clauses = array();
         $where_clauses[] = "deleted = 0";
+        $used_fallback = false;
         
         // Location filter (zip code)
         if (!empty($criteria['zip'])) {
@@ -133,7 +134,38 @@ class MockMLS extends Basic
             $comparables[] = $comp;
         }
         
-        return $comparables;
+        // If no comparables found with the criteria, fall back to closest by price in same ZIP
+        if (empty($comparables) && !empty($criteria['zip']) && !empty($criteria['price'])) {
+            $zip = $db->quote($criteria['zip']);
+            $price = floatval($criteria['price']);
+            
+            // Query for 5 closest properties by price in the same ZIP
+            $fallback_query = "SELECT *, ABS(list_price - $price) as price_diff 
+                             FROM mock_mls_data 
+                             WHERE zip = '$zip' 
+                             AND deleted = 0 
+                             ORDER BY price_diff ASC 
+                             LIMIT 5";
+            
+            $result = $db->query($fallback_query);
+            
+            while ($row = $db->fetchByAssoc($result)) {
+                $comp = new MockMLS();
+                foreach ($row as $field => $value) {
+                    if (property_exists($comp, $field) && $field != 'price_diff') {
+                        $comp->$field = $value;
+                    }
+                }
+                $comparables[] = $comp;
+            }
+            
+            $used_fallback = true;
+        }
+        
+        return array(
+            'properties' => $comparables,
+            'used_fallback' => $used_fallback
+        );
     }
     
     /**

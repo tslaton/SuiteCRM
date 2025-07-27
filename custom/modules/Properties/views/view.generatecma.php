@@ -85,12 +85,19 @@ class PropertiesViewGenerateCMA extends SugarView
         ];
         
         // Find comparable properties
-        $comparables = $this->findComparables($property, $config);
+        $result = $this->findComparables($property, $config);
+        $comparables = $result['properties'];
+        $used_fallback = $result['used_fallback'];
         
         if (empty($comparables)) {
-            SugarApplication::appendErrorMessage('No comparable properties found with the specified criteria.');
+            SugarApplication::appendErrorMessage('No comparable properties found in ZIP code ' . $property->zip_code . '.');
             SugarApplication::redirect("index.php?module=Properties&action=DetailView&record={$property->id}");
             return;
+        }
+        
+        // Add message if fallback was used
+        if ($used_fallback) {
+            SugarApplication::appendSuccessMessage('No exact matches found with your criteria. Showing the 5 closest properties by price in ZIP ' . $property->zip_code . '.');
         }
         
         // Generate PDF
@@ -121,17 +128,17 @@ class PropertiesViewGenerateCMA extends SugarView
         
         // Build criteria for search
         $criteria = [
-            'zip' => $property->property_address_postalcode,
+            'zip' => $property->zip_code,
             'property_type' => $this->mapPropertyType($property->property_type),
             'bedrooms' => $property->bedrooms,
             'bathrooms' => $property->bathrooms,
             'square_footage' => $property->square_footage,
-            'price' => $property->list_price,
+            'price' => $property->price,
             'sold_only' => $config['sold_only'],
             'date_range_months' => $config['date_range_months'],
         ];
         
-        // Use the MockMLS Bean's findComparables method
+        // Use the MockMLS Bean's findComparables method (returns array with 'properties' and 'used_fallback')
         return $mockMLS->findComparables($criteria, $config['max_comparables']);
     }
     
@@ -190,7 +197,7 @@ class PropertiesViewGenerateCMA extends SugarView
             $pdf->writeHTML($html, true, false, true, false, '');
             
             // Create upload directory if it doesn't exist
-            $uploadDir = 'upload/cma_reports/';
+            $uploadDir = getcwd() . '/upload/cma_reports/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -225,14 +232,14 @@ class PropertiesViewGenerateCMA extends SugarView
         // Subject Property Section
         $html .= '<h2 style="color: #2c5aa0;">Subject Property</h2>';
         $html .= '<table cellpadding="5" cellspacing="0" border="0">';
-        $html .= '<tr><td width="30%"><strong>Address:</strong></td><td>' . $property->property_address_street . ', ' . $property->property_address_city . ', ' . $property->property_address_state . ' ' . $property->property_address_postalcode . '</td></tr>';
+        $html .= '<tr><td width="30%"><strong>Address:</strong></td><td>' . $property->street_address . ', ' . $property->city . ', ' . $property->state . ' ' . $property->zip_code . '</td></tr>';
         $html .= '<tr><td><strong>Property Type:</strong></td><td>' . ucfirst($property->property_type) . '</td></tr>';
         $html .= '<tr><td><strong>Bedrooms:</strong></td><td>' . $property->bedrooms . '</td></tr>';
         $html .= '<tr><td><strong>Bathrooms:</strong></td><td>' . $property->bathrooms . '</td></tr>';
         $html .= '<tr><td><strong>Square Footage:</strong></td><td>' . number_format($property->square_footage) . ' sq ft</td></tr>';
         $html .= '<tr><td><strong>Lot Size:</strong></td><td>' . $property->lot_size . ' acres</td></tr>';
         $html .= '<tr><td><strong>Year Built:</strong></td><td>' . $property->year_built . '</td></tr>';
-        $html .= '<tr><td><strong>List Price:</strong></td><td style="font-size: 14px; color: #2c5aa0;"><strong>$' . number_format($property->list_price, 2) . '</strong></td></tr>';
+        $html .= '<tr><td><strong>List Price:</strong></td><td style="font-size: 14px; color: #2c5aa0;"><strong>$' . number_format($property->price, 2) . '</strong></td></tr>';
         $html .= '</table>';
         
         // Comparable Properties Section
@@ -244,23 +251,31 @@ class PropertiesViewGenerateCMA extends SugarView
         
         foreach ($comparables as $comp) {
             $compCount++;
-            $pricePerSqft = $comp['square_footage'] > 0 ? $comp['sold_price'] / $comp['square_footage'] : 0;
-            $totalSoldPrice += $comp['sold_price'];
+            // Handle both sold and unsold properties
+            $price = !empty($comp->sold_price) ? $comp->sold_price : $comp->list_price;
+            $pricePerSqft = $comp->square_footage > 0 ? $price / $comp->square_footage : 0;
+            $totalSoldPrice += $price;
             $totalPricePerSqft += $pricePerSqft;
             
             $html .= '<div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 15px;">';
             $html .= '<h3 style="color: #555; margin: 0 0 10px 0;">Comparable #' . $compCount . '</h3>';
             $html .= '<table cellpadding="3" cellspacing="0" border="0">';
-            $html .= '<tr><td width="30%"><strong>Address:</strong></td><td>' . $comp['address'] . ', ' . $comp['city'] . ', ' . $comp['state'] . ' ' . $comp['zip'] . '</td></tr>';
-            $html .= '<tr><td><strong>Property Type:</strong></td><td>' . ucfirst(str_replace('_', ' ', $comp['property_type'])) . '</td></tr>';
-            $html .= '<tr><td><strong>Bedrooms/Bathrooms:</strong></td><td>' . $comp['bedrooms'] . ' / ' . $comp['bathrooms'] . '</td></tr>';
-            $html .= '<tr><td><strong>Square Footage:</strong></td><td>' . number_format($comp['square_footage']) . ' sq ft</td></tr>';
-            $html .= '<tr><td><strong>Year Built:</strong></td><td>' . $comp['year_built'] . '</td></tr>';
-            $html .= '<tr><td><strong>List Price:</strong></td><td>$' . number_format($comp['list_price'], 2) . '</td></tr>';
-            $html .= '<tr><td><strong>Sold Price:</strong></td><td style="color: #2c5aa0;"><strong>$' . number_format($comp['sold_price'], 2) . '</strong></td></tr>';
+            $html .= '<tr><td width="30%"><strong>Address:</strong></td><td>' . $comp->address . ', ' . $comp->city . ', ' . $comp->state . ' ' . $comp->zip . '</td></tr>';
+            $html .= '<tr><td><strong>Property Type:</strong></td><td>' . ucfirst(str_replace('_', ' ', $comp->property_type)) . '</td></tr>';
+            $html .= '<tr><td><strong>Bedrooms/Bathrooms:</strong></td><td>' . $comp->bedrooms . ' / ' . $comp->bathrooms . '</td></tr>';
+            $html .= '<tr><td><strong>Square Footage:</strong></td><td>' . number_format($comp->square_footage) . ' sq ft</td></tr>';
+            $html .= '<tr><td><strong>Year Built:</strong></td><td>' . $comp->year_built . '</td></tr>';
+            $html .= '<tr><td><strong>List Price:</strong></td><td>$' . number_format($comp->list_price, 2) . '</td></tr>';
+            if (!empty($comp->sold_price)) {
+                $html .= '<tr><td><strong>Sold Price:</strong></td><td style="color: #2c5aa0;"><strong>$' . number_format($comp->sold_price, 2) . '</strong></td></tr>';
+            }
             $html .= '<tr><td><strong>Price/Sq Ft:</strong></td><td>$' . number_format($pricePerSqft, 2) . '</td></tr>';
-            $html .= '<tr><td><strong>Days on Market:</strong></td><td>' . $comp['days_on_market'] . ' days</td></tr>';
-            $html .= '<tr><td><strong>Sold Date:</strong></td><td>' . date('m/d/Y', strtotime($comp['sold_date'])) . '</td></tr>';
+            if (!empty($comp->days_on_market)) {
+                $html .= '<tr><td><strong>Days on Market:</strong></td><td>' . $comp->days_on_market . ' days</td></tr>';
+            }
+            if (!empty($comp->sold_date)) {
+                $html .= '<tr><td><strong>Sold Date:</strong></td><td>' . date('m/d/Y', strtotime($comp->sold_date)) . '</td></tr>';
+            }
             $html .= '</table>';
             $html .= '</div>';
         }
@@ -270,7 +285,7 @@ class PropertiesViewGenerateCMA extends SugarView
         
         $avgSoldPrice = $compCount > 0 ? $totalSoldPrice / $compCount : 0;
         $avgPricePerSqft = $compCount > 0 ? $totalPricePerSqft / $compCount : 0;
-        $subjectPricePerSqft = $property->square_footage > 0 ? $property->list_price / $property->square_footage : 0;
+        $subjectPricePerSqft = $property->square_footage > 0 ? $property->price / $property->square_footage : 0;
         $suggestedPrice = $avgPricePerSqft * $property->square_footage;
         
         $html .= '<table cellpadding="5" cellspacing="0" border="1" style="border-color: #ddd;">';
@@ -320,7 +335,7 @@ class PropertiesViewGenerateCMA extends SugarView
             $document->status_id = 'Active';
             $document->active_date = date('Y-m-d');
             $document->assigned_user_id = $current_user->id;
-            $document->description = 'Comparative Market Analysis for ' . $property->property_address_street;
+            $document->description = 'Comparative Market Analysis for ' . $property->street_address;
             $document->save();
             
             // Create document revision
@@ -339,9 +354,15 @@ class PropertiesViewGenerateCMA extends SugarView
                 $document->document_revision_id = $docRevision->id;
                 $document->save();
                 
-                // Link document to property
-                $document->load_relationship('properties_documents');
-                $document->properties_documents->add($property->id);
+                // Link document to property (if relationship exists)
+                if ($document->load_relationship('properties')) {
+                    $document->properties->add($property->id);
+                }
+                
+                // Also try linking from property side
+                if ($property->load_relationship('documents')) {
+                    $property->documents->add($document->id);
+                }
                 
                 // Link document to related contacts
                 if ($property->load_relationship('properties_contacts')) {

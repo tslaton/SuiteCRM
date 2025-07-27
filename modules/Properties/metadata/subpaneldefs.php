@@ -102,5 +102,23 @@ $layout_defs['Properties'] = array(
                 ),
             ),
         ),
+        'documents' => array(
+            'order' => 500,
+            'module' => 'Documents',
+            'subpanel_name' => 'default',
+            'sort_order' => 'desc',
+            'sort_by' => 'date_entered',
+            'title_key' => 'LBL_DOCUMENTS_SUBPANEL_TITLE',
+            'get_subpanel_data' => 'documents',
+            'top_buttons' => array(
+                0 => array(
+                    'widget_class' => 'SubPanelTopButtonQuickCreate',
+                ),
+                1 => array(
+                    'widget_class' => 'SubPanelTopSelectButton',
+                    'mode' => 'MultiSelect',
+                ),
+            ),
+        ),
     ),
 );

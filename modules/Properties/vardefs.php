@@ -153,6 +153,15 @@ $dictionary['Properties'] = array(
             'bean_name' => 'Opportunity',
             'vname' => 'LBL_TRANSACTIONS',
         ),
+        'documents' => array(
+            'name' => 'documents',
+            'type' => 'link',
+            'relationship' => 'documents_properties',
+            'source' => 'non-db',
+            'module' => 'Documents',
+            'bean_name' => 'Document',
+            'vname' => 'LBL_DOCUMENTS',
+        ),
     ),
     'relationships' => array(
         'properties_contacts' => array(
