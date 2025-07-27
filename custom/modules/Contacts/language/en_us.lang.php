@@ -16,3 +16,6 @@ $mod_strings['LBL_OPPORTUNITY_ROLE'] = 'Transaction Role';
 $mod_strings['LNK_NEW_OPPORTUNITY'] = 'Create Transaction';
 $mod_strings['LBL_OPPORTUNITIES_SUBPANEL_TITLE'] = 'Transactions';
 $mod_strings['LBL_OPPORTUNITIES'] = 'Transactions';
+
+// Subpanel titles
+$mod_strings['LBL_CONTACTS_SUBPANEL_TITLE'] = 'Related Contacts';

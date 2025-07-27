@@ -14,6 +14,9 @@ class CustomPropertiesViewDetail extends PropertiesViewDetail
         $this->addCMAButton();
         
         parent::display();
+        
+        // Hardcode the first subpanel title
+        $this->hardcodeContactsSubpanelTitle();
     }
     
     /**
@@ -37,5 +40,38 @@ class CustomPropertiesViewDetail extends PropertiesViewDetail
         
         // Insert after Edit button (position 1)
         array_splice($this->dv->defs['templateMeta']['form']['buttons'], 2, 0, array($cmaButton));
+    }
+    
+    /**
+     * Hardcode the contacts subpanel title
+     */
+    private function hardcodeContactsSubpanelTitle()
+    {
+        echo '<script type="text/javascript">
+            $(document).ready(function() {
+                // Find the first subpanel title and replace it
+                var firstSubpanel = $("#subpanel_list li:first-child .panel-heading a .col-xs-10 div");
+                if (firstSubpanel.length > 0) {
+                    // Keep the icon but replace the text
+                    var icon = firstSubpanel.find(".suitepicon").detach();
+                    firstSubpanel.html("");
+                    firstSubpanel.append(icon);
+                    firstSubpanel.append(" RELATED CONTACTS");
+                }
+                
+                // Also handle when subpanel is toggled
+                $("#subpanel_list li:first-child .panel-heading a").on("click", function() {
+                    setTimeout(function() {
+                        var firstSubpanel = $("#subpanel_list li:first-child .panel-heading a .col-xs-10 div");
+                        if (firstSubpanel.length > 0 && !firstSubpanel.text().includes("RELATED CONTACTS")) {
+                            var icon = firstSubpanel.find(".suitepicon").detach();
+                            firstSubpanel.html("");
+                            firstSubpanel.append(icon);
+                            firstSubpanel.append(" RELATED CONTACTS");
+                        }
+                    }, 100);
+                });
+            });
+        </script>';
     }
 }

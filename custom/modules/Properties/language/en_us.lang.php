@@ -25,3 +25,10 @@ $mod_strings['LBL_MODULE_TITLE'] = 'Properties: Home';
 $mod_strings['LBL_SEARCH_FORM_TITLE'] = 'Property Search';
 $mod_strings['LBL_LIST_FORM_TITLE'] = 'Property List';
 $mod_strings['LBL_NEW_FORM_TITLE'] = 'New Property';
+
+// Subpanel Titles
+$mod_strings['LBL_CONTACTS_SUBPANEL_TITLE'] = 'Related Contacts';
+$mod_strings['LBL_TRANSACTIONS_SUBPANEL_TITLE'] = 'Related Transactions';
+$mod_strings['LBL_DOCUMENTS_SUBPANEL_TITLE'] = 'Documents & CMAs';
+$mod_strings['LBL_ACTIVITIES_SUBPANEL_TITLE'] = 'Activities';
+$mod_strings['LBL_HISTORY_SUBPANEL_TITLE'] = 'History';
