@@ -211,7 +211,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -219,7 +219,7 @@
             "description": "Set up the logic_hooks.php file in custom/modules/Opportunities to register a before_save logic hook that will trigger custom commission calculation logic.",
             "dependencies": [],
             "details": "Create or update custom/modules/Opportunities/logic_hooks.php to include an entry for the before_save event, specifying the order, description, file path, class, and method for the commission calculation logic.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the logic hook is triggered when an Opportunity record is saved by adding temporary logging or debugging output."
           },
           {
@@ -230,7 +230,7 @@
               "4.1"
             ],
             "details": "Create the referenced PHP file and class. In the hook method, check if sales_stage is changing to 'Closed Won' (or equivalent). If so, calculate the commission using the amount and commission rate, and set the commission_c field.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that commission_c is only set when sales_stage transitions to 'Closed Won' and remains unchanged for other updates."
           },
           {
@@ -241,7 +241,7 @@
               "4.2"
             ],
             "details": "Store the commission rate in a config file or user preference. Add admin panel options to set and update the default commission rate (e.g., 2.5% or 3%). Ensure the logic hook retrieves the correct rate for each calculation.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test commission calculation with different configured rates and verify the admin UI updates and persists the rate correctly."
           },
           {
@@ -252,7 +252,7 @@
               "4.3"
             ],
             "details": "Modify the logic hook to detect and handle scenarios where commissions are split, distributing the calculated amount according to defined rules or fields.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with Opportunities involving multiple agents and verify that commission_c is correctly split and recorded for each agent."
           },
           {
@@ -263,7 +263,7 @@
               "4.4"
             ],
             "details": "Test commission calculation for various Opportunity scenarios, including different sales stages, amounts, commission rates, and split commissions. Verify that the commission_c field displays correctly in the detail view and that no unintended recalculations occur.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Follow the provided test strategy: test transitions to 'Closed Won', changes to other fields, different rates and amounts, UI display, and edge cases such as zero or missing values."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-27T17:37:44.622Z",
+      "updated": "2025-07-27T18:06:15.500Z",
       "description": "Tasks for master context"
     }
   }
