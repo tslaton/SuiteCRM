@@ -548,7 +548,7 @@
           1,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -556,7 +556,7 @@
             "description": "Create a custom dashlet class (ActiveListingsDashlet.php) that extends DashletGeneric to serve as the backend for the Active Listings widget.",
             "dependencies": [],
             "details": "Set up the PHP class in custom/modules/Home/Dashlets/ActiveListingsDashlet/ActiveListingsDashlet.php, ensuring it registers correctly and can be added to dashboards.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the dashlet appears in the dashboard add menu and loads without errors."
           },
           {
@@ -567,7 +567,7 @@
               "9.1"
             ],
             "details": "Use the provided query pattern to retrieve property details, and implement sorting options (newest, price high/low) and pagination logic as needed.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with different users and listing counts; verify correct records, sorting, and pagination."
           },
           {
@@ -578,7 +578,7 @@
               "9.2"
             ],
             "details": "Develop the template to show all required fields, ensure responsive layout, and include buttons for edit, view, and schedule showing.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check visual layout with various data; verify all fields and buttons render and function as intended."
           },
           {
@@ -589,7 +589,7 @@
               "9.3"
             ],
             "details": "Ensure the link passes the correct filter parameters so the Properties module displays only active listings for the current user.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Click the link and confirm the Properties list view loads with the correct filter and results."
           },
           {
@@ -600,7 +600,7 @@
               "9.4"
             ],
             "details": "Test with varying numbers of listings, sorting, pagination, quick-action buttons, and the 'View All' link. Validate display and interaction across supported browsers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Follow the provided test strategy: verify display, sorting, actions, pagination, and filter application. Document and resolve any issues found."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-27T00:18:09.489Z",
+      "updated": "2025-07-27T16:15:50.162Z",
       "description": "Tasks for master context"
     }
   }
