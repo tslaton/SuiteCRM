@@ -412,7 +412,7 @@
                         <div class="pipeline-container">
                             <div class="pipeline-stages">
                                 {foreach from=$dashboardData.widgets.transaction_pipeline.pipeline.stages item=stage}
-                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&sales_stage={$stage.stage|urlencode}'">
+                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&query=true&sales_stage_advanced[]={$stage.stage|urlencode}'">
                                         <div class="pipeline-stage-name">{$stage.label}</div>
                                         <div class="pipeline-stage-count">{$stage.count}</div>
                                         <div class="pipeline-stage-amount">{$stage.formatted_amount}</div>

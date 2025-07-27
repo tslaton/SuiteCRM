@@ -617,7 +617,7 @@
           5,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -625,7 +625,7 @@
             "description": "Create the PipelineDashlet class in custom/modules/Home/Dashlets/PipelineDashlet/PipelineDashlet.php, extending DashletGeneric, to serve as the backend logic for the transaction pipeline widget.",
             "dependencies": [],
             "details": "Set up the PHP class structure, ensure it integrates with SuiteCRM's dashlet framework, and prepare for data querying and widget configuration.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the dashlet appears in the dashboard add-widget menu and loads without errors."
           },
           {
@@ -636,7 +636,7 @@
               "10.1"
             ],
             "details": "Write efficient SQL or ORM queries to fetch transaction data grouped by stage, and aggregate both count and value per stage for the current agent.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with sample data to ensure counts and values are accurate for each stage, including edge cases with no transactions or all in one stage."
           },
           {
@@ -647,7 +647,7 @@
               "10.2"
             ],
             "details": "Develop a compact, visually clear template that highlights key metrics, uses color coding for high-value or attention-required stages, and includes a summary of total pipeline value and count.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the widget with various data distributions and verify correct visualization, color coding, and summary display."
           },
           {
@@ -658,7 +658,7 @@
               "10.3"
             ],
             "details": "Ensure the Kanban link navigates correctly and the refresh button triggers an AJAX call to reload data, maintaining the widget's compact layout.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test navigation to the Kanban view and verify the refresh button updates data in real time without a full page reload."
           },
           {
@@ -669,7 +669,7 @@
               "10.4"
             ],
             "details": "Test with transactions in various stages, validate calculations, check responsiveness, and confirm that the widget remains informative and compact.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Perform end-to-end testing with different data scenarios, verify all features, and ensure the widget meets user requirements for clarity and utility."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-27T16:15:50.162Z",
+      "updated": "2025-07-27T16:59:46.341Z",
       "description": "Tasks for master context"
     }
   }
