@@ -34,6 +34,9 @@ class HomeViewRealEstateHub extends SugarView
         // Fetch transaction pipeline data
         $pipelineData = $this->getTransactionPipeline($current_user->id);
         
+        // Fetch upcoming showings data
+        $upcomingShowings = $this->getUpcomingShowings($current_user->id);
+        
         // Initialize dashboard data structure
         $dashboardData = array(
             'widgets' => array(
@@ -63,7 +66,8 @@ class HomeViewRealEstateHub extends SugarView
                     'placeholder' => 'Upcoming showings and tasks will be displayed here',
                     'col' => 3,
                     'row' => 1,
-                    'size' => 'medium'
+                    'size' => 'medium',
+                    'showings' => $upcomingShowings
                 ),
                 'quick_actions' => array(
                     'title' => 'Quick Actions',
@@ -285,6 +289,132 @@ class HomeViewRealEstateHub extends SugarView
             'total_count' => $total_count,
             'total_amount' => $total_amount,
             'formatted_total_amount' => '$' . number_format($total_amount, 0)
+        );
+    }
+    
+    /**
+     * Get upcoming showings and tasks for a user
+     * @param string $userId
+     * @return array
+     */
+    private function getUpcomingShowings($userId)
+    {
+        global $db, $timedate;
+        
+        $showings = array();
+        
+        // Query for upcoming meetings in the next 7 days
+        $sql = "SELECT 
+                    m.id,
+                    m.name,
+                    m.date_start,
+                    m.date_end,
+                    m.status,
+                    m.location,
+                    m.description,
+                    m.parent_type,
+                    m.parent_id,
+                    o.name as opportunity_name,
+                    o.sales_stage,
+                    p.street_address,
+                    p.city,
+                    p.state
+                FROM meetings m
+                LEFT JOIN opportunities o ON (m.parent_type = 'Opportunities' AND m.parent_id = o.id AND o.deleted = 0)
+                LEFT JOIN properties_opportunities po ON (o.id = po.opportunity_id AND po.deleted = 0)
+                LEFT JOIN properties p ON (po.property_id = p.id AND p.deleted = 0)
+                WHERE m.assigned_user_id = " . $db->quote($userId) . "
+                AND m.deleted = 0
+                AND m.date_start >= NOW()
+                AND m.date_start <= DATE_ADD(NOW(), INTERVAL 7 DAY)
+                ORDER BY m.date_start ASC
+                LIMIT 20";
+        
+        $result = $db->query($sql);
+        
+        while ($row = $db->fetchByAssoc($result)) {
+            // Format date and time
+            $datetime = strtotime($row['date_start']);
+            $row['formatted_date'] = date('M j, Y', $datetime);
+            $row['formatted_time'] = date('g:i A', $datetime);
+            $row['day_of_week'] = date('l', $datetime);
+            
+            // Determine day group
+            $today = strtotime('today');
+            $tomorrow = strtotime('tomorrow');
+            $days_from_now = floor(($datetime - $today) / 86400);
+            
+            if ($days_from_now == 0) {
+                $row['day_group'] = 'Today';
+            } elseif ($days_from_now == 1) {
+                $row['day_group'] = 'Tomorrow';
+            } elseif ($days_from_now <= 7) {
+                $row['day_group'] = $row['day_of_week'];
+            } else {
+                $row['day_group'] = 'Next Week';
+            }
+            
+            // Add property info if available
+            if (!empty($row['street_address'])) {
+                $row['property_address'] = $row['street_address'] . ', ' . $row['city'] . ', ' . $row['state'];
+            }
+            
+            // Determine meeting type based on name or parent
+            if (stripos($row['name'], 'showing') !== false) {
+                $row['meeting_type'] = 'showing';
+                $row['type_icon'] = 'glyphicon-home';
+                $row['type_label'] = 'Property Showing';
+            } elseif (stripos($row['name'], 'inspection') !== false) {
+                $row['meeting_type'] = 'inspection';
+                $row['type_icon'] = 'glyphicon-search';
+                $row['type_label'] = 'Inspection';
+            } elseif (stripos($row['name'], 'appraisal') !== false) {
+                $row['meeting_type'] = 'appraisal';
+                $row['type_icon'] = 'glyphicon-usd';
+                $row['type_label'] = 'Appraisal';
+            } elseif (stripos($row['name'], 'negotiation') !== false) {
+                $row['meeting_type'] = 'negotiation';
+                $row['type_icon'] = 'glyphicon-briefcase';
+                $row['type_label'] = 'Negotiation';
+            } else {
+                $row['meeting_type'] = 'meeting';
+                $row['type_icon'] = 'glyphicon-calendar';
+                $row['type_label'] = 'Meeting';
+            }
+            
+            $showings[] = $row;
+        }
+        
+        // Group showings by day
+        $grouped_showings = array();
+        $overdue_count = 0;
+        
+        // Also check for overdue meetings
+        $overdueSql = "SELECT COUNT(*) as count 
+                       FROM meetings m
+                       WHERE m.assigned_user_id = " . $db->quote($userId) . "
+                       AND m.deleted = 0
+                       AND m.status = 'Planned'
+                       AND m.date_start < NOW()";
+        
+        $overdueResult = $db->query($overdueSql);
+        $overdueRow = $db->fetchByAssoc($overdueResult);
+        $overdue_count = (int)$overdueRow['count'];
+        
+        // Group the showings
+        foreach ($showings as $showing) {
+            $day_group = $showing['day_group'];
+            if (!isset($grouped_showings[$day_group])) {
+                $grouped_showings[$day_group] = array();
+            }
+            $grouped_showings[$day_group][] = $showing;
+        }
+        
+        return array(
+            'showings' => $showings,
+            'grouped_showings' => $grouped_showings,
+            'total_count' => count($showings),
+            'overdue_count' => $overdue_count
         );
     }
 }

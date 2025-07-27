@@ -29,12 +29,15 @@ $tables_to_truncate = [
     'properties',
     'opportunities', 
     'contacts',
+    'meetings',
     'opportunities_contacts',
     'properties_contacts', // Standard many-to-many relationship
     'properties_contacts_roles', // Properties-Contacts with roles
     'properties_opportunities', // Properties-Opportunities many-to-many
     'contacts_opportunities_roles', // Contacts-Opportunities with roles
-    'documents_properties' // Documents-Properties relationship
+    'documents_properties', // Documents-Properties relationship
+    'meetings_contacts', // Meetings-Contacts relationship
+    'meetings_properties' // Meetings-Properties relationship (if custom)
 ];
 
 foreach ($tables_to_truncate as $table) {
@@ -55,6 +58,7 @@ $result = $db->query($query);
 $properties_created = 0;
 $transactions_created = 0;
 $contacts_created = 0;
+$meetings_created = 0;
 
 // Arrays for random data generation
 $agent_first_names = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'Robert', 'Lisa', 'James', 'Mary'];
@@ -300,10 +304,89 @@ while ($mls_property = $db->fetchByAssoc($result)) {
         $transaction->load_relationship('contacts');
         $transaction->contacts->add($client->id);
         $transaction->contacts->add($agent->id);
+        
+        // Create meetings (showings) for active transactions
+        if (in_array($transaction->sales_stage, ['Inquiry', 'Showing', 'Offer Made', 'Under Contract', 'Inspection/Appraisal'])) {
+            $num_meetings = rand(1, 3); // 1-3 meetings per active transaction
+            
+            for ($m = 0; $m < $num_meetings; $m++) {
+                $meeting = BeanFactory::newBean('Meetings');
+                
+                // Determine meeting type based on transaction stage
+                if ($transaction->sales_stage == 'Inquiry' || $transaction->sales_stage == 'Showing') {
+                    $meeting->name = 'Property Showing - ' . $property->street_address;
+                    $meeting->meeting_type_c = 'showing';
+                } elseif ($transaction->sales_stage == 'Offer Made' || $transaction->sales_stage == 'Under Contract') {
+                    $meeting->name = 'Negotiation Meeting - ' . $property->street_address;
+                    $meeting->meeting_type_c = 'negotiation';
+                } elseif ($transaction->sales_stage == 'Inspection/Appraisal') {
+                    $meeting_types = ['Property Inspection', 'Appraisal Meeting'];
+                    $meeting->name = $meeting_types[array_rand($meeting_types)] . ' - ' . $property->street_address;
+                    $meeting->meeting_type_c = 'inspection';
+                }
+                
+                // Set meeting date/time
+                // Past meetings for later stages, future meetings for early stages
+                if (in_array($transaction->sales_stage, ['Inquiry', 'Showing'])) {
+                    // Future meetings (next 1-14 days)
+                    $days_ahead = rand(1, 14);
+                    $hour = rand(9, 17); // 9 AM to 5 PM
+                    $meeting->date_start = date('Y-m-d H:00:00', strtotime("+{$days_ahead} days {$hour}:00"));
+                } elseif ($transaction->sales_stage == 'Offer Made') {
+                    // Mix of past and future meetings
+                    if (rand(0, 1) == 0) {
+                        // Past (last 7 days)
+                        $days_ago = rand(1, 7);
+                        $hour = rand(9, 17);
+                        $meeting->date_start = date('Y-m-d H:00:00', strtotime("-{$days_ago} days {$hour}:00"));
+                    } else {
+                        // Future (next 7 days)
+                        $days_ahead = rand(1, 7);
+                        $hour = rand(9, 17);
+                        $meeting->date_start = date('Y-m-d H:00:00', strtotime("+{$days_ahead} days {$hour}:00"));
+                    }
+                } else {
+                    // Past meetings for later stages
+                    $days_ago = rand(1, 21);
+                    $hour = rand(9, 17);
+                    $meeting->date_start = date('Y-m-d H:00:00', strtotime("-{$days_ago} days {$hour}:00"));
+                }
+                
+                $meeting->date_end = date('Y-m-d H:i:s', strtotime($meeting->date_start . ' +1 hour'));
+                $meeting->duration_hours = 1;
+                $meeting->duration_minutes = 0;
+                $meeting->status = strtotime($meeting->date_start) < time() ? 'Held' : 'Planned';
+                $meeting->location = $property->street_address . ', ' . $property->city . ', ' . $property->state;
+                $meeting->description = 'Meeting regarding property at ' . $property->street_address;
+                $meeting->assigned_user_id = $current_user->id;
+                
+                // Set parent (related to opportunity)
+                $meeting->parent_type = 'Opportunities';
+                $meeting->parent_id = $transaction->id;
+                
+                $meeting->save();
+                $meetings_created++;
+                
+                // Link meeting to contacts
+                if ($meeting->load_relationship('contacts')) {
+                    $meeting->contacts->add($client->id); // Client always attends
+                    $meeting->contacts->add($agent->id);  // Agent always attends
+                }
+                
+                // Link meeting to property if custom relationship exists
+                if ($meeting->load_relationship('properties')) {
+                    $meeting->properties->add($property->id);
+                } else {
+                    // If no custom relationship, store property_id in a custom field if it exists
+                    $meeting->property_id_c = $property->id;
+                    $meeting->save();
+                }
+            }
+        }
     }
     
     if ($properties_created % 10 == 0) {
-        echo "Created $properties_created properties, $transactions_created transactions, $contacts_created contacts...\n";
+        echo "Created $properties_created properties, $transactions_created transactions, $contacts_created contacts, $meetings_created meetings...\n";
     }
 }
 
@@ -312,6 +395,7 @@ echo "Created:\n";
 echo "- $properties_created Properties\n";
 echo "- $transactions_created Transactions\n";
 echo "- $contacts_created Contacts\n";
+echo "- $meetings_created Meetings\n";
 echo "\nTransaction stage distribution:\n";
 
 // Show stage distribution

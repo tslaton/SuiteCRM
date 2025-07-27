@@ -685,7 +685,7 @@
           1,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -693,7 +693,7 @@
             "description": "Create the UpcomingDashlet class in custom/modules/Home/Dashlets/UpcomingDashlet/UpcomingDashlet.php, extending DashletGeneric to support upcoming showings and tasks.",
             "dependencies": [],
             "details": "Set up the PHP class structure, initialize dashlet configuration, and ensure it can be added to dashboards. Prepare for data querying and template integration.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the dashlet appears in the dashboard add menu and loads without errors."
           },
           {
@@ -704,7 +704,7 @@
               "11.1"
             ],
             "details": "Use the provided SQL pattern for meetings and create a similar query for tasks. Ensure results include required fields (time, property/client, type) and filter by assigned user.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test queries directly and within the dashlet to confirm correct filtering and data retrieval for various user scenarios."
           },
           {
@@ -715,7 +715,7 @@
               "11.2"
             ],
             "details": "Implement grouping logic, display item details, add color coding for priority/proximity, and include a count of overdue items with a warning indicator.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify correct grouping, color coding, and overdue indicators with a variety of test data."
           },
           {
@@ -726,7 +726,7 @@
               "11.3"
             ],
             "details": "Ensure actions update records in real time and the calendar link navigates to the correct view. Handle UI feedback for actions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test all quick-action buttons for correct behavior and confirm the calendar link works as intended."
           },
           {
@@ -737,7 +737,7 @@
               "11.4"
             ],
             "details": "Review and refine filtering logic, confirm all display and interaction requirements, and prepare for deployment.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test the widget end-to-end with different user roles and data sets to ensure all features and filters work as specified."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-27T16:59:46.341Z",
+      "updated": "2025-07-27T17:37:44.622Z",
       "description": "Tasks for master context"
     }
   }

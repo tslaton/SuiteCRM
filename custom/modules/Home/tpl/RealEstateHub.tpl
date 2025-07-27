@@ -246,6 +246,154 @@
         padding: 40px;
     }
     
+    /* Upcoming Showings styles */
+    .showings-container {
+        padding: 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .showings-overdue-alert {
+        background: #fff5f5;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        color: #721c24;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .showings-groups-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .showings-day-group {
+        flex: 1 1 200px;
+        min-width: 180px;
+        max-width: 300px;
+        background: #f8f8f8;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px;
+    }
+    
+    .showings-day-header {
+        font-weight: 600;
+        color: #534d64;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .showing-item {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 8px;
+        transition: all 0.3s;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    .showing-item:hover {
+        border-color: #aa9dcc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+    }
+    
+    .showing-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .showing-time {
+        font-weight: 600;
+        color: #534d64;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+    
+    .showing-type {
+        display: inline-block;
+        font-size: 10px;
+        color: #666;
+        background: #e8e8e8;
+        padding: 1px 6px;
+        border-radius: 3px;
+        margin-left: 5px;
+    }
+    
+    .showing-type.showing {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .showing-type.inspection {
+        background: #fce4ec;
+        color: #c2185b;
+    }
+    
+    .showing-type.appraisal {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+    
+    .showing-type.negotiation {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    
+    .showing-title {
+        font-weight: 500;
+        color: #534d64;
+        margin-bottom: 3px;
+        font-size: 12px;
+        line-height: 1.3;
+    }
+    
+    .showing-location {
+        font-size: 11px;
+        color: #666;
+        display: flex;
+        align-items: flex-start;
+        gap: 3px;
+        margin-top: 3px;
+    }
+    
+    .showing-location i {
+        font-size: 10px;
+        margin-top: 2px;
+    }
+    
+    .showing-stage {
+        font-size: 10px;
+        color: #999;
+        margin-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .showings-no-data {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+        padding: 40px;
+    }
+    
+    .showings-view-all {
+        text-align: center;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
     .real-estate-hub .dashboard-header {
         margin-bottom: 30px;
         display: flex;
@@ -436,11 +584,71 @@
             {* Upcoming Showings/Tasks Widget *}
             <div class="widget-container">
                 <div class="widget-header">
-                    <span><i class="glyphicon glyphicon-calendar"></i>{$dashboardData.widgets.upcoming_showings.title}</span>
+                    <span>
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        {$dashboardData.widgets.upcoming_showings.title}
+                        {if $dashboardData.widgets.upcoming_showings.showings.total_count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.upcoming_showings.showings.total_count} upcoming
+                            </span>
+                        {/if}
+                    </span>
                     <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
                 </div>
                 <div class="widget-body">
-                    {$dashboardData.widgets.upcoming_showings.placeholder}
+                    <div class="showings-container">
+                        {if $dashboardData.widgets.upcoming_showings.showings.overdue_count > 0}
+                            <div class="showings-overdue-alert">
+                                <span>
+                                    <i class="glyphicon glyphicon-warning-sign"></i>
+                                    {$dashboardData.widgets.upcoming_showings.showings.overdue_count} overdue meeting{if $dashboardData.widgets.upcoming_showings.showings.overdue_count != 1}s{/if}
+                                </span>
+                                <a href="index.php?module=Meetings&action=index&searchFormTab=advanced_search&query=true&status_advanced[]=Planned" class="btn btn-sm btn-danger">View</a>
+                            </div>
+                        {/if}
+                        
+                        {if $dashboardData.widgets.upcoming_showings.showings.total_count > 0}
+                            <div class="showings-groups-container">
+                                {foreach from=$dashboardData.widgets.upcoming_showings.showings.grouped_showings key=day_group item=day_showings}
+                                    <div class="showings-day-group">
+                                        <div class="showings-day-header">{$day_group}</div>
+                                        {foreach from=$day_showings item=showing}
+                                            <div class="showing-item" onclick="window.location.href='index.php?module=Meetings&action=DetailView&record={$showing.id}'">
+                                                <div class="showing-time">
+                                                    <i class="glyphicon glyphicon-time"></i> {$showing.formatted_time}
+                                                    <span class="showing-type {$showing.meeting_type}">{$showing.type_label}</span>
+                                                </div>
+                                                <div class="showing-title">{$showing.name}</div>
+                                                {if $showing.location}
+                                                    <div class="showing-location">
+                                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                                        {$showing.location}
+                                                    </div>
+                                                {/if}
+                                                {if $showing.opportunity_name && $showing.sales_stage}
+                                                    <div class="showing-stage">
+                                                        {$showing.opportunity_name} - {$showing.sales_stage}
+                                                    </div>
+                                                {/if}
+                                            </div>
+                                        {/foreach}
+                                    </div>
+                                {/foreach}
+                            </div>
+                            
+                            <div class="showings-view-all">
+                                <a href="index.php?module=Calendar&action=index" class="btn btn-sm btn-default">
+                                    <i class="glyphicon glyphicon-calendar"></i> View Full Calendar
+                                </a>
+                            </div>
+                        {else}
+                            <div class="showings-no-data">
+                                <i class="glyphicon glyphicon-calendar" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                                <p>No upcoming showings or meetings</p>
+                                <a href="index.php?module=Meetings&action=EditView" class="btn btn-primary">Schedule Meeting</a>
+                            </div>
+                        {/if}
+                    </div>
                 </div>
             </div>
         </div>
