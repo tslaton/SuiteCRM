@@ -14,7 +14,7 @@ if (ACLController::checkAccess('MockMLS', 'edit', true)) {
 }
 
 if (ACLController::checkAccess('MockMLS', 'list', true)) {
-    $module_menu[] = array('index.php?module=MockMLS&action=index', $mod_strings['LNK_LIST'], 'View', 'MockMLS');
+    $module_menu[] = array('index.php?module=MockMLS&action=index', isset($mod_strings['LNK_LIST']) ? $mod_strings['LNK_LIST'] : 'View MLS Data', 'View', 'MockMLS');
 }
 
 if (ACLController::checkAccess('MockMLS', 'import', true)) {

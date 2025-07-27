@@ -55,74 +55,85 @@ class MockMLS extends Basic
      */
     public function findComparables($criteria, $limit = 10)
     {
-        $query = new SugarQuery();
-        $query->select(array('*'));
-        $query->from($this);
+        global $db;
+        
+        $where_clauses = array();
+        $where_clauses[] = "deleted = 0";
         
         // Location filter (zip code)
         if (!empty($criteria['zip'])) {
-            $query->where()->equals('zip', $criteria['zip']);
+            $zip = $db->quote($criteria['zip']);
+            $where_clauses[] = "zip = '$zip'";
         }
         
         // Property type filter
         if (!empty($criteria['property_type'])) {
-            $query->where()->equals('property_type', $criteria['property_type']);
+            $type = $db->quote($criteria['property_type']);
+            $where_clauses[] = "property_type = '$type'";
         }
         
         // Bedroom range (+/- 1)
         if (!empty($criteria['bedrooms'])) {
-            $query->where()->gte('bedrooms', $criteria['bedrooms'] - 1);
-            $query->where()->lte('bedrooms', $criteria['bedrooms'] + 1);
+            $min_beds = $criteria['bedrooms'] - 1;
+            $max_beds = $criteria['bedrooms'] + 1;
+            $where_clauses[] = "bedrooms >= $min_beds AND bedrooms <= $max_beds";
         }
         
         // Bathroom range (+/- 0.5)
         if (!empty($criteria['bathrooms'])) {
-            $query->where()->gte('bathrooms', $criteria['bathrooms'] - 0.5);
-            $query->where()->lte('bathrooms', $criteria['bathrooms'] + 0.5);
+            $min_baths = $criteria['bathrooms'] - 0.5;
+            $max_baths = $criteria['bathrooms'] + 0.5;
+            $where_clauses[] = "bathrooms >= $min_baths AND bathrooms <= $max_baths";
         }
         
         // Square footage range (+/- 20%)
         if (!empty($criteria['square_footage'])) {
             $min_sqft = $criteria['square_footage'] * 0.8;
             $max_sqft = $criteria['square_footage'] * 1.2;
-            $query->where()->gte('square_footage', $min_sqft);
-            $query->where()->lte('square_footage', $max_sqft);
+            $where_clauses[] = "square_footage >= $min_sqft AND square_footage <= $max_sqft";
         }
         
         // Price range (+/- 15%)
         if (!empty($criteria['price'])) {
             $min_price = $criteria['price'] * 0.85;
             $max_price = $criteria['price'] * 1.15;
-            $query->where()->gte('list_price', $min_price);
-            $query->where()->lte('list_price', $max_price);
+            $where_clauses[] = "list_price >= $min_price AND list_price <= $max_price";
         }
         
         // Only include sold properties if specified
         if (!empty($criteria['sold_only'])) {
-            $query->where()->notNull('sold_price');
-            $query->where()->notNull('sold_date');
+            $where_clauses[] = "sold_price IS NOT NULL";
+            $where_clauses[] = "sold_date IS NOT NULL";
         }
         
         // Date range filter (e.g., sold within last 6 months)
         if (!empty($criteria['date_range_months'])) {
             $date_limit = date('Y-m-d', strtotime("-{$criteria['date_range_months']} months"));
             if (!empty($criteria['sold_only'])) {
-                $query->where()->gte('sold_date', $date_limit);
+                $where_clauses[] = "sold_date >= '$date_limit'";
             } else {
-                $query->where()->gte('listing_date', $date_limit);
+                $where_clauses[] = "listing_date >= '$date_limit'";
             }
         }
         
-        // Exclude deleted records
-        $query->where()->equals('deleted', 0);
+        // Build the query
+        $where_sql = implode(' AND ', $where_clauses);
+        $query = "SELECT * FROM mock_mls_data WHERE $where_sql ORDER BY listing_date DESC LIMIT $limit";
         
-        // Order by most recent first
-        $query->orderBy('listing_date', 'DESC');
+        $result = $db->query($query);
+        $comparables = array();
         
-        // Limit results
-        $query->limit($limit);
+        while ($row = $db->fetchByAssoc($result)) {
+            $comp = new MockMLS();
+            foreach ($row as $field => $value) {
+                if (property_exists($comp, $field)) {
+                    $comp->$field = $value;
+                }
+            }
+            $comparables[] = $comp;
+        }
         
-        return $query->execute();
+        return $comparables;
     }
     
     /**

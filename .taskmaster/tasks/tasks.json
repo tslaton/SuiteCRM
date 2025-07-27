@@ -143,7 +143,7 @@
         "dependencies": [
           1
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -196,7 +196,7 @@
               "3.4"
             ],
             "details": "Execute sample CMA queries filtering by location, size, and price. Measure query response times and confirm that indexes improve performance. Ensure data supports meaningful CMA generation.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run CMA Generator with the mock data. Validate accuracy and relevance of results. Benchmark query performance and adjust indexes if needed."
           }
         ]
@@ -413,15 +413,15 @@
           1,
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Develop Custom CMA Generation Action",
             "description": "Create a custom action (GenerateCMA.php) in the Properties module to initiate CMA generation from the property detail view.",
             "dependencies": [],
-            "details": "Implement the backend entry point for CMA generation, ensuring it can be triggered via a custom button in the Property detail view. Register the action in the module menu and controller as needed.",
-            "status": "pending",
+            "details": "Implement the backend entry point for CMA generation, ensuring it can be triggered via a custom button in the Property detail view. Register the action in the module menu and controller as needed.\n<info added on 2025-07-27T00:00:52.216Z>\nCompleted the implementation of the custom CMA generation action with the following components:\n\n1. Created action_view_map.php to register the generatecma action\n2. Implemented view.generatecma.php with full CMA generation logic including:\n   - Configuration form display\n   - Comparable property search using MockMLS Bean\n   - PDF generation using TCPDF\n   - Document creation and linking to Property/Contacts\n3. Created generateCMAConfig.tpl template for configuration UI\n4. Extended Properties detail view to add Generate CMA button\n5. Added all necessary language strings\n\nThe action is now fully functional from the Property detail view and handles the complete CMA workflow from configuration to PDF generation and document storage.\n</info added on 2025-07-27T00:00:52.216Z>",
+            "status": "done",
             "testStrategy": "Verify the custom action appears and is accessible from the Property detail view. Confirm the action triggers the CMA generation workflow."
           },
           {
@@ -432,7 +432,7 @@
               "7.1"
             ],
             "details": "Use the provided pseudocode as a basis for querying comparables. Add support for configurable search radius and price range percentage. Handle edge cases such as no comparables found.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with various property types and parameter configurations. Ensure the correct number and type of comparables are returned, and handle cases with insufficient data."
           },
           {
@@ -443,7 +443,7 @@
               "7.2"
             ],
             "details": "Create a reusable PDF template. Integrate property and comparables data, including images and charts. Ensure the report is client-ready and visually consistent with branding guidelines.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Generate sample PDFs for different scenarios. Verify all required sections are present, data is accurate, images and charts render correctly, and formatting meets requirements."
           },
           {
@@ -455,7 +455,7 @@
               "7.3"
             ],
             "details": "Modify the Property detail view layout to include the button. Implement a modal or panel for users to set search radius, price range, and other parameters before generating the CMA.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the button appears and functions correctly. Test parameter configuration UI for usability and correct data passing to the backend."
           },
           {
@@ -466,7 +466,7 @@
               "7.3"
             ],
             "details": "Implement logic to create a Document record for each generated CMA, associate it with the relevant Property and Contacts, and ensure proper access permissions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that each generated CMA is stored as a Document, linked correctly, and accessible from both Property and Contact records. Verify document metadata and permissions."
           }
         ]
@@ -753,15 +753,15 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Analyze and Prioritize Real Estate Modules",
             "description": "Identify all modules relevant to real estate workflows and determine their priority order for the main navigation menu, focusing on Properties, Contacts, and Transactions.",
             "dependencies": [],
-            "details": "Review existing SuiteCRM modules and any custom modules. Create a prioritized list with Properties, Contacts, and Transactions at the top. Document modules to remove or deprioritize based on real estate agent needs.",
-            "status": "pending",
+            "details": "Review existing SuiteCRM modules and any custom modules. Create a prioritized list with Properties, Contacts, and Transactions at the top. Document modules to remove or deprioritize based on real estate agent needs.\n<info added on 2025-07-27T00:15:44.790Z>\nModule priority order for main navigation menu:\n1. Home\n2. Properties\n3. Contacts\n4. Opportunities (Transactions)\n5. Leads\n6. Supporting modules:\n   - Calendar\n   - Documents\n   - Other auxiliary modules\n7. MockMLS (to be placed in resources section)\n</info added on 2025-07-27T00:15:44.790Z>",
+            "status": "done",
             "testStrategy": "Verify the prioritized list with stakeholders. Ensure all required modules are included and irrelevant modules are identified for removal or deprioritization."
           },
           {
@@ -771,8 +771,8 @@
             "dependencies": [
               "12.1"
             ],
-            "details": "Write PHP code to reorder modules, remove or hide non-relevant modules, and add custom menu items for quick access to Add Property, Schedule Showing, and Generate CMA. Use SuiteCRM's menu extension points for compatibility.",
-            "status": "pending",
+            "details": "Write PHP code to reorder modules, remove or hide non-relevant modules, and add custom menu items for quick access to Add Property, Schedule Showing, and Generate CMA. Use SuiteCRM's menu extension points for compatibility.\n<info added on 2025-07-27T00:17:50.392Z>\nImplemented multiple menu extension files to organize the navigation structure:\n\n1. real_estate_menu.php - Main menu reorganization that reorders modules, hides non-relevant ones, and adds quick access items for Add Property, Schedule Showing, and Generate CMA.\n\n2. configure_tabs.php - Tab configuration file that controls which modules appear in the top navigation and their display order.\n\n3. properties_menu.php - Properties module-specific menu customizations for enhanced property management workflow.\n\nAdditionally, created a demo data generation script that populates the system with 35 Properties, 30 Transactions, and 65 Contacts matching Mock MLS locations to facilitate testing and demonstrations.\n</info added on 2025-07-27T00:17:50.392Z>",
+            "status": "done",
             "testStrategy": "Check that the menu displays modules in the specified order and that custom menu items appear and link correctly."
           },
           {
@@ -783,7 +783,7 @@
               "12.2"
             ],
             "details": "Group related modules and features under dropdown categories. Develop a collapsible sidebar alternative to the top menu, ensuring both options are available and user-friendly.",
-            "status": "pending",
+            "status": "deferred",
             "testStrategy": "Test navigation flow for clarity and ease of use. Verify dropdowns and sidebar function correctly on all supported devices."
           },
           {
@@ -794,7 +794,7 @@
               "12.2"
             ],
             "details": "Create or source real estate-themed icons. Update CSS to apply the new color scheme and icons to the navigation menu. Ensure visual consistency with other real estate modules.",
-            "status": "pending",
+            "status": "deferred",
             "testStrategy": "Verify that styling and icons display correctly across browsers and devices. Confirm that the menu aligns with branding guidelines."
           },
           {
@@ -806,7 +806,7 @@
               "12.4"
             ],
             "details": "Test and refine the menu layout for various screen sizes. Configure SuiteCRM role-based menu visibility using built-in settings or custom logic as needed.",
-            "status": "pending",
+            "status": "deferred",
             "testStrategy": "Test menu responsiveness on multiple devices and browsers. Verify that users with different roles see the correct menu items and have appropriate access."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-26T23:47:50.225Z",
+      "updated": "2025-07-27T00:18:09.489Z",
       "description": "Tasks for master context"
     }
   }
