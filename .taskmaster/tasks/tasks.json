@@ -345,7 +345,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -353,7 +353,7 @@
             "description": "Create a new EntryPoint file for the open house sign-in form and register it within the SuiteCRM EntryPoint registry.",
             "dependencies": [],
             "details": "Implement custom/EntryPoint/OpenHouseSignIn.php and register it in custom/Extension/application/Ext/EntryPointRegistry/OpenHouse.php to enable public access to the sign-in form.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the EntryPoint is accessible via the specified URL format and is properly registered in the system."
           },
           {
@@ -364,7 +364,7 @@
               "6.1"
             ],
             "details": "Ensure the form is optimized for mobile devices and provides a user-friendly interface for open house attendees.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test the form layout and usability across multiple mobile devices and browsers."
           },
           {
@@ -375,7 +375,7 @@
               "6.2"
             ],
             "details": "Generate and validate tokens to ensure each form submission is linked to the correct property and prevent unauthorized access.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test token generation, validation, and ensure submissions are only accepted with valid tokens and property IDs."
           },
           {
@@ -386,7 +386,7 @@
               "6.3"
             ],
             "details": "Validate all input fields, create the Lead record with the appropriate relationship, and trigger an email notification to the assigned agent.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Submit valid and invalid data, verify lead creation, property relationship, lead_source value, and email delivery."
           },
           {
@@ -397,7 +397,7 @@
               "6.4"
             ],
             "details": "Allow agents to generate QR codes for each property and enforce submission limits to protect against abuse.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Generate QR codes, scan and test sign-in links, and verify rate limiting by simulating rapid or repeated submissions."
           }
         ]
@@ -1034,7 +1034,7 @@
     ],
     "metadata": {
       "created": "2025-07-25T15:07:18.741Z",
-      "updated": "2025-07-27T18:06:15.500Z",
+      "updated": "2025-07-27T19:02:15.044Z",
       "description": "Tasks for master context"
     }
   }

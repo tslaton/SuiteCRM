@@ -16,6 +16,9 @@ $viewdefs[$module_name] = array(
                     4 => array(
                         'customCode' => '<input type="button" class="button" onClick="window.location=\'index.php?module=Opportunities&action=EditView&return_module=Properties&return_action=DetailView&return_id={$fields.id.value}&property_id={$fields.id.value}&property_name={$fields.name.value}\'" value="{$MOD.LBL_CREATE_TRANSACTION}">',
                     ),
+                    5 => array(
+                        'customCode' => '<input type="button" class="button" onClick="window.open(\'index.php?module=Properties&action=generateqr&record={$fields.id.value}\', \'QRCode\', \'width=850,height=800,resizable=yes,scrollbars=yes\');" value="Open House QR Code">',
+                    ),
                 ),
             ),
             'maxColumns' => '2',
