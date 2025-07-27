@@ -52,46 +52,97 @@ $defaultCommissionRate = isset($sugar_config['default_commission_rate']) ? $suga
 
 ?>
 
-<form method="POST" action="index.php?module=Administration&action=real_estate_settings">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" class="edit view">
-        <tr>
-            <th align="left" colspan="4">
-                <h4><?php echo $mod_strings['LBL_REAL_ESTATE_SETTINGS_TITLE']; ?></h4>
-            </th>
-        </tr>
+<style>
+.real-estate-settings-container {
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 30px;
+    margin: 20px 0;
+}
+
+.real-estate-settings-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.real-estate-settings-header h4 {
+    margin: 0;
+    color: #333333;
+    font-size: 18px;
+}
+
+.real-estate-form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.real-estate-form-label {
+    width: 200px;
+    padding-right: 20px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.real-estate-form-control {
+    flex: 1;
+}
+
+.real-estate-form-control input[type="number"] {
+    padding: 5px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    width: 100px;
+}
+
+.real-estate-help-text {
+    display: block;
+    margin-top: 5px;
+    color: #666666;
+    font-size: 12px;
+}
+
+.real-estate-form-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eeeeee;
+}
+
+.real-estate-form-actions .button {
+    margin-right: 10px;
+}
+</style>
+
+<div class="real-estate-settings-container">
+    <form method="POST" action="index.php?module=Administration&action=real_estate_settings">
+        <div class="real-estate-settings-header">
+            <h4><?php echo $mod_strings['LBL_REAL_ESTATE_SETTINGS_TITLE']; ?></h4>
+        </div>
         
-        <tr>
-            <td scope="row" width="20%">
+        <div class="real-estate-form-group">
+            <label class="real-estate-form-label">
                 <?php echo $mod_strings['LBL_DEFAULT_COMMISSION_RATE']; ?>:
                 <span class="required">*</span>
-            </td>
-            <td width="30%">
+            </label>
+            <div class="real-estate-form-control">
                 <input type="number" 
                        name="default_commission_rate" 
                        id="default_commission_rate" 
                        value="<?php echo $defaultCommissionRate; ?>" 
                        min="0" 
                        max="100" 
-                       step="0.01"
-                       style="width: 100px;"> %
-                <br>
-                <span class="help-block">
+                       step="0.01"> %
+                <span class="real-estate-help-text">
                     <?php echo $mod_strings['LBL_DEFAULT_COMMISSION_RATE_HELP']; ?>
                 </span>
-            </td>
-            <td scope="row" width="20%">&nbsp;</td>
-            <td width="30%">&nbsp;</td>
-        </tr>
+            </div>
+        </div>
         
-        <tr>
-            <td colspan="4">&nbsp;</td>
-        </tr>
-        
-        <tr>
-            <td colspan="4">
-                <input type="submit" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL']; ?>" class="button primary">
-                <input type="button" name="cancel" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL']; ?>" class="button" onclick="location.href='index.php?module=Administration&action=index'">
-            </td>
-        </tr>
-    </table>
-</form>
+        <div class="real-estate-form-actions">
+            <input type="submit" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL']; ?>" class="button primary">
+            <input type="button" name="cancel" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL']; ?>" class="button" onclick="location.href='index.php?module=Administration&action=index'">
+        </div>
+    </form>
+</div>
