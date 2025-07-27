@@ -6,13 +6,18 @@ cache/*
 upload/*
 !upload/index.html
 # Ignore some files and directories from the custom directory.
-custom/
 custom/history/*
 custom/blowfish/*
 custom/modulebuilder/*
 custom/working/*
-custom/modules/*/Ext/
 custom/modules/unified_search_modules_display.php
+#built from custom/Extension
+custom/modules/*/Ext/
+custom/application/Ext/
+custom/Extension/application/Ext/Include/modules.ext.php
+custom/Extension/application/Ext/Language/*.lang.ext.php
+# Auto-generated field overrides
+custom/Extension/modules/*/Ext/Vardefs/_override_sugarfield_jjwg_maps_*.php
 # Ignore AOD indexes
 modules/AOD_Index/Index/*
 install/status.json
@@ -104,7 +109,6 @@ tests/_output/*
 BrowserStackLocal
 browserstack.err
 cache/
-custom/**/
 .sass-cache/
 
 # Ignore testing environment
