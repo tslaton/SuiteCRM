@@ -31,9 +31,9 @@
     
     {* Kanban Board Container *}
     <div class="kanban-board" style="margin-top: 20px;">
-        <div class="row">
+        <div class="kanban-stages-grid">
             {foreach from=$salesStages key=stageKey item=stageLabel}
-                <div class="col-sm-6 col-md-4 col-lg-2 kanban-column" data-stage="{$stageKey}">
+                <div class="kanban-column" data-stage="{$stageKey}">
                     {* Column Header with Stats *}
                     <div class="kanban-column-header">
                         <h4 class="stage-title">{$stageLabel}</h4>
@@ -41,13 +41,19 @@
                             <span class="badge">{$stageStats.$stageKey.count|default:0}</span>
                             <span class="stage-total">{$stageStats.$stageKey.total_amount|default:"$0.00"}</span>
                         </div>
+                        {if $stageStats.$stageKey.total_commission}
+                        <div class="stage-commission">
+                            <i class="glyphicon glyphicon-piggy-bank"></i>
+                            <span>{$stageStats.$stageKey.total_commission}</span>
+                        </div>
+                        {/if}
                     </div>
                     
                     {* Cards Container *}
                     <div class="kanban-cards" id="stage-{$stageKey}">
                         {if isset($groupedOpportunities.$stageKey) && count($groupedOpportunities.$stageKey) > 0}
                             {foreach from=$groupedOpportunities.$stageKey item=opportunity}
-                                <div class="kanban-card" data-id="{$opportunity.id}" data-stage="{$stageKey}">
+                                <div class="kanban-card{if $opportunity.name|strstr:'Purchase'} purchase-card{elseif $opportunity.name|strstr:'Sale' || $opportunity.name|strstr:'Sell'} sale-card{/if}" data-id="{$opportunity.id}" data-stage="{$stageKey}">
                                     <div class="card-header">
                                         <a href="index.php?module=Opportunities&action=DetailView&record={$opportunity.id}" 
                                            class="card-title" target="_blank">
@@ -66,12 +72,16 @@
                                             <span class="amount">{$opportunity.amount_formatted}</span>
                                         </div>
                                         <div class="card-field">
+                                            <i class="glyphicon glyphicon-piggy-bank"></i>
+                                            <span class="commission">{$opportunity.commission_formatted}</span>
+                                        </div>
+                                        <div class="card-field">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                             <span class="close-date">{$opportunity.date_closed}</span>
                                         </div>
                                         <div class="card-field">
                                             <i class="glyphicon glyphicon-time"></i>
-                                            <span class="days-in-stage">{$opportunity.days_in_stage} days</span>
+                                            <span class="days-in-stage">{$opportunity.days_in_stage} days old</span>
                                         </div>
                                     </div>
                                     <div class="card-footer">
@@ -147,8 +157,14 @@
     border-top: none;
 }
 
+.kanban-stages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    align-items: start;
+}
+
 .kanban-column {
-    margin-bottom: 20px;
     min-height: 500px;
 }
 
@@ -176,8 +192,19 @@
 }
 
 .stage-total {
-    font-weight: bold;
-    color: #27ae60;
+    font-weight: normal;
+    color: #333;
+}
+
+.stage-commission {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.stage-commission i {
+    color: #5cb85c;
+    margin-right: 5px;
 }
 
 .kanban-cards {
@@ -206,6 +233,54 @@
 
 .kanban-card.dragging {
     opacity: 0.5;
+}
+
+/* Purchase card styling */
+.kanban-card.purchase-card {
+    background-color: #f8f6fc;
+    border-color: #d7cfeb;
+}
+
+.kanban-card.purchase-card:hover {
+    border-color: #aa9dcc;
+    background-color: #f5f2fa;
+}
+
+.kanban-card.purchase-card .card-header {
+    background-color: #f0ecf7;
+    border-bottom-color: #d7cfeb;
+}
+
+.kanban-card.purchase-card .card-title {
+    color: #7a6b9a;
+}
+
+.kanban-card.purchase-card .card-title:hover {
+    color: #534d64;
+}
+
+/* Sale card styling */
+.kanban-card.sale-card {
+    background-color: #f0f7ff;
+    border-color: #d0e3f7;
+}
+
+.kanban-card.sale-card:hover {
+    border-color: #3498db;
+    background-color: #e8f2ff;
+}
+
+.kanban-card.sale-card .card-header {
+    background-color: #e8f2ff;
+    border-bottom-color: #d0e3f7;
+}
+
+.kanban-card.sale-card .card-title {
+    color: #2c7bb6;
+}
+
+.kanban-card.sale-card .card-title:hover {
+    color: #1a5490;
 }
 
 .card-header {
@@ -250,16 +325,21 @@
 }
 
 .amount {
-    font-weight: bold;
-    color: #27ae60;
+    font-weight: normal;
+    color: #333;
+}
+
+.commission {
+    font-weight: 600;
+    color: #5cb85c;
 }
 
 .close-date {
-    color: #e74c3c;
+    color: #333;
 }
 
 .days-in-stage {
-    color: #f39c12;
+    color: #666;
 }
 
 /* Responsive adjustments */

@@ -81,9 +81,12 @@ class OpportunitiesViewKanban extends SugarView
                     o.assigned_user_id,
                     o.date_closed,
                     o.probability,
+                    o.commission_c,
+                    o.commission_rate_c,
                     a.name as account_name,
                     CONCAT(IFNULL(u.first_name, ''), ' ', IFNULL(u.last_name, '')) as assigned_user_name,
-                    DATEDIFF(NOW(), o.date_modified) as days_in_stage
+                    DATEDIFF(NOW(), o.date_entered) as days_in_stage,
+                    u.commission_rate_c as user_commission_rate
                 FROM opportunities o
                 LEFT JOIN accounts_opportunities ao ON o.id = ao.opportunity_id AND ao.deleted = 0
                 LEFT JOIN accounts a ON ao.account_id = a.id AND a.deleted = 0
@@ -130,6 +133,30 @@ class OpportunitiesViewKanban extends SugarView
             // Calculate days in current stage (simplified - in production would need audit table)
             $row['days_in_stage'] = max(0, intval($row['days_in_stage']));
             
+            // Calculate commission
+            if (!empty($row['commission_c']) && floatval($row['commission_c']) > 0) {
+                // Use actual commission if set and greater than 0
+                $commission = floatval($row['commission_c']);
+                $row['commission_formatted'] = '$' . number_format($commission, 0);
+                $row['commission_type'] = 'actual';
+                $row['commission_raw'] = $commission;
+            } else {
+                // Calculate estimated commission
+                $commission_rate = 0;
+                if (!empty($row['commission_rate_c'])) {
+                    $commission_rate = floatval($row['commission_rate_c']);
+                } elseif (!empty($row['user_commission_rate'])) {
+                    $commission_rate = floatval($row['user_commission_rate']);
+                } else {
+                    $commission_rate = 3.0; // Default 3% if not set
+                }
+                
+                $commission = $amount * ($commission_rate / 100);
+                $row['commission_formatted'] = '$' . number_format($commission, 0) . ' (est)';
+                $row['commission_type'] = 'estimated';
+                $row['commission_raw'] = $commission;
+            }
+            
             // Add to appropriate stage group
             $stage = $row['sales_stage'];
             if (isset($groupedData[$stage])) {
@@ -152,15 +179,28 @@ class OpportunitiesViewKanban extends SugarView
         foreach ($groupedOpportunities as $stage => $opportunities) {
             $count = count($opportunities);
             $totalAmount = 0;
+            $totalCommission = 0;
+            $hasEstimated = false;
             
             foreach ($opportunities as $opp) {
                 $totalAmount += floatval($opp['amount']);
+                $totalCommission += floatval($opp['commission_raw']);
+                if ($opp['commission_type'] == 'estimated') {
+                    $hasEstimated = true;
+                }
+            }
+            
+            $commissionDisplay = '$' . number_format($totalCommission, 0);
+            if ($hasEstimated) {
+                $commissionDisplay .= ' (est)';
             }
             
             $stats[$stage] = array(
                 'count' => $count,
                 'total_amount' => '$' . number_format($totalAmount, 0),
-                'total_amount_raw' => $totalAmount
+                'total_amount_raw' => $totalAmount,
+                'total_commission' => $commissionDisplay,
+                'total_commission_raw' => $totalCommission
             );
         }
         
