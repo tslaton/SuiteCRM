@@ -45,7 +45,7 @@ These features were developed heavily leveraging AI.
 
 My first pass at understanding the repo was generated via the [DeepWiki for SuiteCRM](https://deepwiki.com/SuiteCRM/SuiteCRM). 
 
-I also looked at [SuiteCRM's Documentation](https://docs.suitecrm.com) and the associated GitHub repo. 
+I also looked at [SuiteCRM's Documentation](https://docs.suitecrm.com) and the associated [GitHub repo](https://deepwiki.com/SuiteCRM/SuiteDocs). 
 
 I compared to the DeepWiki for [SuiteCRM-Core](https://github.com/SuiteCRM/SuiteCRM-Core) (v8 modernization) and ultimately chose to build off of SuiteCRM v7 because it was more complete and _less_ modern, which fit the xpirit of the assignment.
 
