@@ -409,24 +409,6 @@
         margin: 0;
     }
     
-    .real-estate-hub .dashboard-actions {
-        display: flex;
-        gap: 10px;
-    }
-    
-    .real-estate-hub .btn-dashboard-toggle {
-        background: #f8f8f8;
-        border: 1px solid #e0e0e0;
-        color: #534d64;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    
-    .real-estate-hub .btn-dashboard-toggle:hover {
-        background: #e0e0e0;
-    }
     
     @media (max-width: 768px) {
         .real-estate-hub .quick-action-btn {
@@ -463,11 +445,6 @@
 <div class="real-estate-hub">
     <div class="dashboard-header">
         <h1 class="dashboard-title">Real Estate Hub</h1>
-        <div class="dashboard-actions">
-            <button class="btn-dashboard-toggle" onclick="window.location.href='index.php?module=Home&action=index&switch_dashboard=suitecrm'">
-                <i class="glyphicon glyphicon-th"></i> Switch to SuiteCRM Dashboard
-            </button>
-        </div>
     </div>
     
     <div class="row">
