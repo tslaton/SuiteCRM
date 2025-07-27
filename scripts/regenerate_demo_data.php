@@ -30,7 +30,11 @@ $tables_to_truncate = [
     'opportunities', 
     'contacts',
     'opportunities_contacts',
-    'properties_contacts' // If this relationship table exists
+    'properties_contacts', // Standard many-to-many relationship
+    'properties_contacts_roles', // Properties-Contacts with roles
+    'properties_opportunities', // Properties-Opportunities many-to-many
+    'contacts_opportunities_roles', // Contacts-Opportunities with roles
+    'documents_properties' // Documents-Properties relationship
 ];
 
 foreach ($tables_to_truncate as $table) {
@@ -159,7 +163,14 @@ while ($mls_property = $db->fetchByAssoc($result)) {
     $agent->save();
     $contacts_created++;
     
-    // Link agent to property
+    // Link agent to property using the role-based relationship
+    if ($property->load_relationship('contacts_roles')) {
+        // Add agent with 'agent' role
+        $db->query("INSERT INTO properties_contacts_roles (id, property_id, contact_id, contact_role, date_modified, deleted) 
+                    VALUES ('" . create_guid() . "', '{$property->id}', '{$agent->id}', 'agent', NOW(), 0)");
+    }
+    
+    // Also add to standard relationship for backward compatibility
     if ($property->load_relationship('contacts')) {
         $property->contacts->add($agent->id);
     }
@@ -186,7 +197,15 @@ while ($mls_property = $db->fetchByAssoc($result)) {
         $client->save();
         $contacts_created++;
         
-        // Link client to property
+        // Link client to property using the role-based relationship
+        if ($property->load_relationship('contacts_roles')) {
+            // Add client with their specific role (buyer or seller)
+            $client_role = $is_purchase ? 'buyer' : 'seller';
+            $db->query("INSERT INTO properties_contacts_roles (id, property_id, contact_id, contact_role, date_modified, deleted) 
+                        VALUES ('" . create_guid() . "', '{$property->id}', '{$client->id}', '{$client_role}', NOW(), 0)");
+        }
+        
+        // Also add to standard relationship for backward compatibility
         if ($property->load_relationship('contacts')) {
             $property->contacts->add($client->id);
         }
@@ -196,6 +215,7 @@ while ($mls_property = $db->fetchByAssoc($result)) {
         $transaction->name = $transaction_name;
         $transaction->amount = $property->price;
         $transaction->sales_stage = $assigned_stage;
+        $transaction->property_id = $property->id; // Set property_id field
         
         // Set probability based on stage
         $stage_probabilities = [
@@ -259,7 +279,24 @@ while ($mls_property = $db->fetchByAssoc($result)) {
             $property->opportunities->add($transaction->id);
         }
         
-        // Link transaction to contacts
+        // Link transaction to contacts using role-based relationship
+        if ($transaction->load_relationship('contacts_roles')) {
+            // Add client with their transaction role
+            $client_role = $is_purchase ? 'buyer' : 'seller';
+            $db->query("INSERT INTO contacts_opportunities_roles (id, contact_id, opportunity_id, contact_role, date_modified, deleted) 
+                        VALUES ('" . create_guid() . "', '{$client->id}', '{$transaction->id}', '{$client_role}', NOW(), 0)");
+            
+            // Add agent with appropriate role
+            $agent_role = $is_purchase ? 'buyer_agent' : 'seller_agent';
+            $commission_percentage = '2.5'; // 2.5% commission
+            $commission_amount = $transaction->sales_stage == 'Closed' ? ($transaction->amount * 0.025) : null;
+            
+            $db->query("INSERT INTO contacts_opportunities_roles (id, contact_id, opportunity_id, contact_role, commission_percentage, commission_amount, date_modified, deleted) 
+                        VALUES ('" . create_guid() . "', '{$agent->id}', '{$transaction->id}', '{$agent_role}', '{$commission_percentage}', " . 
+                        ($commission_amount ? "'$commission_amount'" : "NULL") . ", NOW(), 0)");
+        }
+        
+        // Also add to standard relationship for backward compatibility
         $transaction->load_relationship('contacts');
         $transaction->contacts->add($client->id);
         $transaction->contacts->add($agent->id);

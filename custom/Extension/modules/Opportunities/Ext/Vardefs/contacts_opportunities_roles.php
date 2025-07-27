@@ -3,11 +3,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-// Link field for Opportunities/Transactions module
+// Link field for Opportunities module
 $dictionary['Opportunity']['fields']['contacts_roles'] = array(
     'name' => 'contacts_roles',
     'type' => 'link',
-    'relationship' => 'contacts_transactions_roles',
+    'relationship' => 'contacts_opportunities_roles',
     'source' => 'non-db',
     'module' => 'Contacts',
     'bean_name' => 'Contact',
