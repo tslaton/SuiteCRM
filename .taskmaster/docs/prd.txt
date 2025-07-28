@@ -1,0 +1,77 @@
+<context>
+# Overview  
+This document outlines the requirements for transforming SuiteCRM into a high-efficiency tool for the day-to-day operations of an individual real estate agent. The primary problem this product solves is the scattered and disorganized nature of managing property listings, active deals, and client interactions. This MVP is for the busy, independent agent who needs a reliable, centralized system to track everything from a new listing to a closed sale and commission payment, reducing administrative overhead and ensuring no details are missed.
+
+# Core Features  
+The MVP will consist of one major UI overhaul and five core features designed to streamline an agent's daily workflow.
+
+- **UI Modernization: The Real Estate Hub:** The default SuiteCRM homepage will be replaced with a dashboard tailored for real estate. This "Hub" will feature actionable, card-based widgets for "My Active Listings," "Transaction Pipeline," and "Upcoming Showings/Tasks." The main navigation will be simplified and reordered to prioritize Properties, Contacts, and Transactions.
+- **Property Management Module:** A completely new module dedicated to managing real estate listings. This is the foundational element of the CRM, allowing agents to track all property-specific information, including address, price, status, photos, and key features.
+- **Transaction Pipeline Visualization:** A visual, Kanban-style board to track deals from initial interest to closing. This replaces the standard list view for opportunities, giving agents an at-a-glance overview of their entire sales pipeline and what needs to happen next for each deal.
+- **Open House Management System:** A feature to streamline lead capture at open houses. This includes a simple, public-facing digital sign-in form that automatically creates new leads in the CRM and associates them with the specific property listing.
+- **Commission Calculator:** An automated tool integrated into the transaction module to calculate agent commissions. When a deal is marked as "Closed," the system will compute the commission based on the final sale price and a pre-set commission percentage, providing immediate financial visibility.
+- **Simple CMA Generator:** A one-click "Comparative Market Analysis" generator. From a property or contact record, an agent can generate a simple, client-ready PDF that shows the subject property and 3-5 comparable properties (from mocked MLS data) to help establish a market value estimate.
+
+# User Experience  
+The target user is **Alex, the Busy Agent**. Alex is an independent agent who handles 5-10 active listings and a dozen or so active buyers at any given time. They are tech-savvy but time-poor, needing tools that are fast, intuitive, and reduce manual data entry.
+
+A typical user flow for Alex would be:
+1.  Alex logs in and immediately sees the **Real Estate Hub**, showing active listings and deals in the pipeline.
+2.  After securing a new listing, Alex adds it to the CRM using the new **Property Management Module**.
+3.  Alex schedules an open house for the new listing and uses the **Open House Management** link on a tablet for visitor sign-in. The new leads are automatically in the CRM for follow-up.
+4.  An open house lead becomes a client. Alex moves them through the **Transaction Pipeline** from "Showing" to "Offer Made" to "Under Contract."
+5.  The deal closes. Alex updates the status to "Closed," and the **Commission Calculator** instantly shows the commission earned.
+6.  For a new potential seller, Alex uses the **Simple CMA Generator** on their contact record to quickly produce a branded report to bring to the listing presentation.
+</context>
+<PRD>
+# Technical Architecture  
+This project will be built by customizing the SuiteCRM 7.x legacy codebase.
+
+- **System Components:**
+    - **UI Modernization:** Achieved by overriding the `Home` module's default view and its Smarty templates (`.tpl`). This involves creating custom dashlets and modifying the main header template. Bootstrap and a simple JS charting library (if not already present) will be used for the widgets.
+    - **Property Management Module:** A new custom module built by extending the base `SugarBean` class. It will have its own database table, vardefs, and MVC components (views, controllers). Module Builder can be used to scaffold this.
+    - **Transaction Pipeline:** This will be a custom view (`view.kanban.php`) for the existing `Opportunities` module (which will be relabeled to "Transactions"). It will use a lightweight JavaScript library like jKanban for the front-end rendering, powered by a custom API endpoint to fetch the data.
+    - **Open House Management:** Implemented as a custom, unauthenticated `EntryPoint`. This PHP file will render a simple HTML form and handle the POST request to create `Lead` records.
+    - **Commission Calculator:** Implemented as a `before_save` Logic Hook on the `Opportunities` module. The hook will check if the `sales_stage` is "Closed Won" and calculate the value for a new custom `commission_c` field.
+    - **CMA Generator:** This will be a custom action in the `Properties` or `Contacts` controller. It will query the mocked property data, format it, and use a PDF generation library like TCPDF (included with SuiteCRM) to create the file.
+- **Data Models:**
+    - A new database table (`properties`) will be created for the Property module, defined by its `vardefs.php`.
+    - A custom table (`mock_mls_data`) will be created and seeded with CSV data to support the CMA Generator.
+    - Custom fields will be added to the `Opportunities` table for commission tracking.
+- **APIs and Integrations:** A simple internal API endpoint will be created to supply data for the Kanban view. No external APIs are required; data like MLS listings will be mocked.
+
+# Development Roadmap  
+The development process is broken down into three logical phases to ensure a usable product is available at each stage.
+
+- **Phase 1: Foundational Module (Core Functionality)**
+    - Build, test, and finalize the **Property Management Module** with full CRUD (Create, Read, Update, Delete) capabilities. This is the cornerstone of the entire application.
+    - Create the basic structure for the **Real Estate Hub** dashboard, even if the widgets are empty placeholders initially.
+- **Phase 2: Core Agent Tools (Internal Workflow)**
+    - Implement the **Transaction Pipeline Visualization** (Kanban board) for the renamed "Transactions" module.
+    - Implement the **Commission Calculator** logic hook and add the custom field to the Transaction detail and edit views.
+- **Phase 3: Client-Facing & Value-Add Features (External Interaction)**
+    - Develop the **Open House Management** sign-in form and the backend lead creation logic.
+    - Build the **Simple CMA Generator** and the associated PDF export functionality.
+    - Populate the Real Estate Hub widgets with data from the other completed modules.
+
+# Logical Dependency Chain
+Development must follow a specific order to be efficient.
+
+1.  **Property Management Module:** This must be built first, as it is the central entity that nearly all other features depend on (Open Houses, CMAs, etc.).
+2.  **Transaction & Commission Features:** The Pipeline and Commission Calculator can be built next, as they only depend on the existing `Opportunities` module.
+3.  **Open House Management:** This depends on the `Properties` module (to link the open house to a listing) and the `Leads` module (for creating attendees).
+4.  **CMA Generator:** This depends on having a populated (mocked) database of properties to query against.
+5.  **Real Estate Hub UI:** This should be built last, as its widgets rely on data from all the other completed modules to be functional and demonstrable.
+
+# Risks and Mitigations  
+- **Technical Risk: Kanban View Complexity:** Building a dynamic, drag-and-drop Kanban interface from scratch in the legacy Smarty/jQuery environment could be time-consuming.
+    - **Mitigation:** Start with the simplest possible implementation. If drag-and-drop is too complex, the MVP can have a static Kanban board where clicking a button moves the deal to the next stage. The visual layout is the key deliverable.
+- **Scope Risk: Overly Ambitious Features:** The CMA generator and Open House system, while simple in concept, can have hidden complexities.
+    - **Mitigation:** Strictly limit the scope. The CMA PDF will have a fixed, basic layout. The Open House form will be a single page with minimal fields (Name, Email, Phone) and no authentication.
+- **Time Risk: Legacy Codebase:** The time required to understand and effectively customize the old SuiteCRM codebase could be underestimated.
+    - **Mitigation:** Leverage existing modules and patterns wherever possible. Relabel the `Opportunities` module instead of creating a new one. Use `Module Builder` to scaffold new modules to reduce boilerplate code.
+
+# Appendix  
+- **Property Module Fields:** MLS ID (Text), Street Address (Text), City (Text), State (Dropdown), Zip Code (Text), Price (Currency), Status (Dropdown: Active, Pending, Sold), Bedrooms (Int), Bathrooms (Decimal), Square Footage (Int), Description (Text Area), Main Photo (Image).
+- **Transaction Pipeline Stages:** Inquiry, Showing, Offer Made, Under Contract, Inspection/Appraisal, Clear to Close, Closed.
+</PRD>

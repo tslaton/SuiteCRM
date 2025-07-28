@@ -1,0 +1,43 @@
+# Task ID: 13
+# Title: Implement Property-Contact Relationships
+# Status: pending
+# Dependencies: 1, 2
+# Priority: high
+# Description: Create and configure relationships between Properties, Contacts, and Transactions to establish a complete real estate data model.
+# Details:
+Define relationships in vardefs.php files: Properties to Contacts (many-to-many for buyers, sellers, and other roles), Properties to Transactions (one-to-many), and Contacts to Transactions (many-to-many). Create relationship metadata files in custom/Extension/modules/*/Ext/Vardefs/ directories. Implement subpanels in detail views to show related records. Add custom fields to relationship tables to specify roles (e.g., seller, buyer, agent, inspector). Modify the Properties module to allow quick creation of a Transaction from a Property record. Add filters in subpanels to show contacts by role. Ensure proper cascade deletion behavior to maintain data integrity. Create relationship-specific views that show the most relevant fields for each context. Use SuiteCRM's relationship management APIs to ensure proper handling of relationships.
+
+# Test Strategy:
+Test creating and viewing relationships between all entity types. Verify subpanels display related records correctly. Test role-specific filtering in relationship subpanels. Verify cascade deletion behavior works as expected. Test creating a Transaction from a Property record. Verify all custom fields in relationship tables save and display correctly.
+
+# Subtasks:
+## 1. Define and Configure Relationship Metadata [pending]
+### Dependencies: None
+### Description: Create and configure many-to-many and one-to-many relationships between Properties, Contacts, and Transactions in vardefs.php and relationship metadata files.
+### Details:
+Define Properties-Contacts (many-to-many with roles), Properties-Transactions (one-to-many), and Contacts-Transactions (many-to-many) relationships in vardefs.php and custom/Extension/modules/*/Ext/Vardefs/ directories. Ensure relationship tables support custom fields for roles.
+
+## 2. Implement and Configure Subpanels in Detail Views [pending]
+### Dependencies: 13.1
+### Description: Add and configure subpanels in Properties, Contacts, and Transactions detail views to display related records and enable navigation.
+### Details:
+Configure subpanels to show related Contacts and Transactions in Properties, related Properties and Transactions in Contacts, and related Properties and Contacts in Transactions. Ensure subpanels display key fields and support navigation.
+
+## 3. Add Custom Fields and Role Filters to Relationship Tables and Subpanels [pending]
+### Dependencies: 13.1, 13.2
+### Description: Extend relationship tables with custom fields to specify roles (e.g., buyer, seller, agent) and implement subpanel filters to display contacts by role.
+### Details:
+Modify relationship tables to include custom fields for roles. Update subpanel layouts and logic to allow filtering of contacts by their role in the relationship.
+
+## 4. Enable Quick Transaction Creation from Property Records [pending]
+### Dependencies: 13.2
+### Description: Modify the Properties module to allow users to quickly create a new Transaction directly from a Property record, pre-filling relevant fields.
+### Details:
+Add a button or action in the Property detail view to create a Transaction. Ensure the new Transaction is linked to the Property and pre-populated with relevant data.
+
+## 5. Implement Cascade Deletion and Relationship-Specific Views [pending]
+### Dependencies: 13.1, 13.2, 13.3
+### Description: Configure cascade deletion behavior to maintain data integrity and create relationship-specific views showing the most relevant fields for each context.
+### Details:
+Set up cascade deletion rules so that deleting a Property, Contact, or Transaction updates or removes related records as appropriate. Design and implement custom views for each relationship context, displaying the most relevant fields.
+

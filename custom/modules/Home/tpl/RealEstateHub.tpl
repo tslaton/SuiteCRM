@@ -1,0 +1,773 @@
+{*
+ * Real Estate Hub Dashboard Template
+ *}
+
+{literal}
+<style>
+    .real-estate-hub {
+        padding: 20px 0;
+    }
+    
+    .real-estate-hub .widget-container {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .real-estate-hub .widget-header {
+        background: #f8f8f8;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #534d64;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .real-estate-hub .widget-header i {
+        margin-right: 10px;
+        color: #aa9dcc;
+    }
+    
+    .real-estate-hub .widget-body {
+        padding: 20px;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-style: italic;
+    }
+    
+    .real-estate-hub .widget-body.large {
+        min-height: 200px;
+        padding: 0;
+    }
+    
+    .real-estate-hub .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 0;
+        min-height: auto;
+        font-style: normal;
+    }
+    
+    .real-estate-hub .quick-action-btn {
+        flex: 1;
+        min-width: 150px;
+        background: #aa9dcc;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 15px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .real-estate-hub .quick-action-btn:hover {
+        background: #9589b3;
+        text-decoration: none;
+        color: #fff;
+    }
+    
+    .real-estate-hub .quick-action-btn i {
+        font-size: 24px;
+    }
+    
+    /* Property listing cards */
+    .property-listings {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 20px;
+        min-height: auto;
+        max-height: 715px;
+        overflow-y: auto;
+    }
+    
+    .property-card {
+        flex: 0 0 240px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .property-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .property-card-image {
+        width: 100%;
+        height: 160px;
+        background: #f5f5f5;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .property-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .property-card-no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #f8f8f8;
+        color: #999;
+    }
+    
+    .property-card-no-image i {
+        font-size: 48px;
+        margin-bottom: 8px;
+        color: #ddd;
+    }
+    
+    .property-card-no-image span {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    .property-card-header {
+        background: #fff;
+        padding: 10px 12px 8px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .property-card-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 4px;
+    }
+    
+    .property-card-address-short {
+        font-size: 14px;
+        font-weight: 500;
+        color: #534d64;
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 8px;
+    }
+    
+    .property-card-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #aa9dcc;
+        margin: 0;
+        white-space: nowrap;
+    }
+    
+    .property-card-city {
+        font-size: 12px;
+        color: #888;
+    }
+    
+    .property-card-body {
+        padding: 8px 12px 10px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .property-card-details {
+        display: flex;
+        gap: 12px;
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .property-card-detail {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .property-card-detail i {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    .property-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: #999;
+        margin-top: auto;
+        padding-top: 6px;
+    }
+    
+    .property-card-mls {
+        font-size: 11px;
+        color: #999;
+    }
+    
+    .property-card-date {
+        font-size: 11px;
+        color: #999;
+    }
+    
+    .property-no-listings {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+        padding: 40px;
+    }
+    
+    /* Transaction Pipeline styles */
+    .pipeline-container {
+        padding: 0;
+        width: 100%;
+    }
+    
+    .pipeline-stages {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 0;
+    }
+    
+    .pipeline-stage {
+        flex: 1 1 140px;
+        max-width: 200px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 15px 10px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    
+    .pipeline-stage:hover {
+        border-color: #aa9dcc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .pipeline-stage-name {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pipeline-stage-count {
+        font-size: 24px;
+        font-weight: 600;
+        color: #534d64;
+        margin-bottom: 5px;
+    }
+    
+    .pipeline-stage-amount {
+        font-size: 14px;
+        color: #aa9dcc;
+        font-weight: 500;
+    }
+    
+    .pipeline-stage-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #aa9dcc;
+        border-radius: 0 0 3px 3px;
+        transition: height 0.3s;
+    }
+    
+    .pipeline-stage:hover .pipeline-stage-bar {
+        height: 6px;
+    }
+    
+    .pipeline-no-data {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+        padding: 40px;
+    }
+    
+    /* Upcoming Showings styles */
+    .showings-container {
+        padding: 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .showings-overdue-alert {
+        background: #fff5f5;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        color: #721c24;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .showings-groups-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .showings-day-group {
+        flex: 1 1 200px;
+        min-width: 180px;
+        max-width: 300px;
+        background: #f8f8f8;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px;
+    }
+    
+    .showings-day-header {
+        font-weight: 600;
+        color: #534d64;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .showing-item {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 8px;
+        transition: all 0.3s;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    .showing-item:hover {
+        border-color: #aa9dcc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+    }
+    
+    .showing-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .showing-time {
+        font-weight: 600;
+        color: #534d64;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+    
+    .showing-type {
+        display: inline-block;
+        font-size: 10px;
+        color: #666;
+        background: #e8e8e8;
+        padding: 1px 6px;
+        border-radius: 3px;
+        margin-left: 5px;
+    }
+    
+    .showing-type.showing {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .showing-type.inspection {
+        background: #fce4ec;
+        color: #c2185b;
+    }
+    
+    .showing-type.appraisal {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+    
+    .showing-type.negotiation {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    
+    .showing-title {
+        font-weight: 500;
+        color: #534d64;
+        margin-bottom: 3px;
+        font-size: 12px;
+        line-height: 1.3;
+    }
+    
+    .showing-location {
+        font-size: 11px;
+        color: #666;
+        display: flex;
+        align-items: flex-start;
+        gap: 3px;
+        margin-top: 3px;
+    }
+    
+    .showing-location i {
+        font-size: 10px;
+        margin-top: 2px;
+    }
+    
+    .showing-stage {
+        font-size: 10px;
+        color: #999;
+        margin-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .showings-no-data {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+        padding: 40px;
+    }
+    
+    .showings-view-all {
+        text-align: center;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .real-estate-hub .dashboard-header {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .real-estate-hub .dashboard-title {
+        font-size: 28px;
+        font-weight: 300;
+        color: #534d64;
+        margin: 0;
+    }
+    
+    
+    @media (max-width: 768px) {
+        .real-estate-hub .quick-action-btn {
+            min-width: 100%;
+        }
+        
+        .real-estate-hub .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .pipeline-stage {
+            flex: 1 1 100%;
+            max-width: none;
+        }
+    }
+    
+    @media (max-width: 1200px) {
+        .real-estate-hub .widget-header span {
+            font-size: 14px;
+        }
+        
+        .real-estate-hub .widget-header span span {
+            display: block;
+            margin-left: 0 !important;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+    }
+</style>
+{/literal}
+
+<div class="real-estate-hub">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Real Estate Hub</h1>
+    </div>
+    
+    <div class="row">
+        {* Active Listings Widget - Large widget taking up left column *}
+        <div class="col-md-6">
+            <div class="widget-container">
+                <div class="widget-header">
+                    <span>
+                        <i class="glyphicon glyphicon-home"></i>
+                        {$dashboardData.widgets.active_listings.title}
+                        {if $dashboardData.widgets.active_listings.properties|@count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.active_listings.formatted_total_value} • {$dashboardData.widgets.active_listings.properties|@count} {if $dashboardData.widgets.active_listings.properties|@count == 1}listing{else}listings{/if}
+                            </span>
+                        {/if}
+                    </span>
+                    <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
+                </div>
+                <div class="widget-body large">
+                    {if $dashboardData.widgets.active_listings.properties|@count > 0}
+                        <div class="property-listings">
+                            {foreach from=$dashboardData.widgets.active_listings.properties item=property}
+                                <a href="index.php?module=Properties&action=DetailView&record={$property.id}" class="property-card">
+                                    <div class="property-card-image">
+                                        {if $property.main_photo}
+                                            <img src="{$property.main_photo}" alt="{$property.street_address}" />
+                                        {else}
+                                            <div class="property-card-no-image">
+                                                <i class="glyphicon glyphicon-home"></i>
+                                                <span>No cover photo</span>
+                                            </div>
+                                        {/if}
+                                    </div>
+                                    <div class="property-card-header">
+                                        <div class="property-card-header-top">
+                                            <div class="property-card-address-short">
+                                                {$property.street_address}
+                                            </div>
+                                            <p class="property-card-price">{$property.formatted_price}</p>
+                                        </div>
+                                        <div class="property-card-city">
+                                            {$property.city}, {$property.state}
+                                        </div>
+                                    </div>
+                                    <div class="property-card-body">
+                                        <div class="property-card-details">
+                                            {if $property.bedrooms}
+                                                <div class="property-card-detail">
+                                                    <i class="glyphicon glyphicon-bed"></i>
+                                                    <span>{$property.bedrooms}</span>
+                                                </div>
+                                            {/if}
+                                            {if $property.bathrooms}
+                                                <div class="property-card-detail">
+                                                    <i class="glyphicon glyphicon-tint"></i>
+                                                    <span>{$property.bathrooms}</span>
+                                                </div>
+                                            {/if}
+                                            {if $property.square_footage}
+                                                <div class="property-card-detail">
+                                                    <i class="glyphicon glyphicon-home"></i>
+                                                    <span>{$property.square_footage|number_format}</span>
+                                                </div>
+                                            {/if}
+                                        </div>
+                                        <div class="property-card-footer">
+                                            <span class="property-card-mls">MLS# {$property.mls_id}</span>
+                                            {if $property.formatted_listing_date}
+                                                <span class="property-card-date">{$property.formatted_listing_date}</span>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </a>
+                            {/foreach}
+                        </div>
+                    {else}
+                        <div class="property-no-listings">
+                            <i class="glyphicon glyphicon-home" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                            <p>No active listings found</p>
+                            <a href="index.php?module=Properties&action=EditView" class="btn btn-primary">Add Your First Property</a>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        
+        {* Right column with stacked widgets *}
+        <div class="col-md-6">
+            {* Transaction Pipeline Widget *}
+            <div class="widget-container">
+                <div class="widget-header">
+                    <span>
+                        <i class="glyphicon glyphicon-stats"></i>
+                        {$dashboardData.widgets.transaction_pipeline.title}
+                        {if $dashboardData.widgets.transaction_pipeline.pipeline.total_count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.transaction_pipeline.pipeline.formatted_total_amount} • {$dashboardData.widgets.transaction_pipeline.pipeline.total_count} deals
+                            </span>
+                        {/if}
+                    </span>
+                    <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
+                </div>
+                <div class="widget-body">
+                    {if $dashboardData.widgets.transaction_pipeline.pipeline.total_count > 0}
+                        <div class="pipeline-container">
+                            <div class="pipeline-stages">
+                                {foreach from=$dashboardData.widgets.transaction_pipeline.pipeline.stages item=stage}
+                                    <div class="pipeline-stage" onclick="window.location.href='index.php?module=Opportunities&action=index&searchFormTab=advanced_search&query=true&sales_stage_advanced[]={$stage.stage|escape:'url'}'">
+                                        <div class="pipeline-stage-name">{$stage.label}</div>
+                                        <div class="pipeline-stage-count">{$stage.count}</div>
+                                        <div class="pipeline-stage-amount">{$stage.formatted_amount}</div>
+                                        {if $dashboardData.widgets.transaction_pipeline.pipeline.total_amount > 0}
+                                            <div class="pipeline-stage-bar" style="width: {($stage.amount / $dashboardData.widgets.transaction_pipeline.pipeline.total_amount * 100)|string_format:"%.0f"}%"></div>
+                                        {/if}
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    {else}
+                        <div class="pipeline-no-data">
+                            <i class="glyphicon glyphicon-stats" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                            <p>No active opportunities in the pipeline</p>
+                            <a href="index.php?module=Opportunities&action=EditView" class="btn btn-primary">Create New Opportunity</a>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+            
+            {* Upcoming Showings/Tasks Widget *}
+            <div class="widget-container">
+                <div class="widget-header">
+                    <span>
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        {$dashboardData.widgets.upcoming_showings.title}
+                        {if $dashboardData.widgets.upcoming_showings.showings.total_count > 0}
+                            <span style="font-weight: normal; color: #aa9dcc; margin-left: 10px;">
+                                {$dashboardData.widgets.upcoming_showings.showings.total_count} upcoming
+                            </span>
+                        {/if}
+                    </span>
+                    <i class="glyphicon glyphicon-refresh" style="cursor: pointer;" title="Refresh"></i>
+                </div>
+                <div class="widget-body">
+                    <div class="showings-container">
+                        {if $dashboardData.widgets.upcoming_showings.showings.overdue_count > 0}
+                            <div class="showings-overdue-alert">
+                                <span>
+                                    <i class="glyphicon glyphicon-warning-sign"></i>
+                                    {$dashboardData.widgets.upcoming_showings.showings.overdue_count} overdue meeting{if $dashboardData.widgets.upcoming_showings.showings.overdue_count != 1}s{/if}
+                                </span>
+                                <a href="index.php?module=Meetings&action=index&searchFormTab=advanced_search&query=true&status_advanced[]=Planned" class="btn btn-sm btn-danger">View</a>
+                            </div>
+                        {/if}
+                        
+                        {if $dashboardData.widgets.upcoming_showings.showings.total_count > 0}
+                            <div class="showings-groups-container">
+                                {foreach from=$dashboardData.widgets.upcoming_showings.showings.grouped_showings key=day_group item=day_showings}
+                                    <div class="showings-day-group">
+                                        <div class="showings-day-header">{$day_group}</div>
+                                        {foreach from=$day_showings item=showing}
+                                            <div class="showing-item" onclick="window.location.href='index.php?module=Meetings&action=DetailView&record={$showing.id}'">
+                                                <div class="showing-time">
+                                                    <i class="glyphicon glyphicon-time"></i> {$showing.formatted_time}
+                                                    <span class="showing-type {$showing.meeting_type}">{$showing.type_label}</span>
+                                                </div>
+                                                <div class="showing-title">{$showing.name}</div>
+                                                {if $showing.location}
+                                                    <div class="showing-location">
+                                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                                        {$showing.location}
+                                                    </div>
+                                                {/if}
+                                                {if $showing.opportunity_name && $showing.sales_stage}
+                                                    <div class="showing-stage">
+                                                        {$showing.opportunity_name} - {$showing.sales_stage}
+                                                    </div>
+                                                {/if}
+                                            </div>
+                                        {/foreach}
+                                    </div>
+                                {/foreach}
+                            </div>
+                            
+                            <div class="showings-view-all">
+                                <a href="index.php?module=Calendar&action=index" class="btn btn-sm btn-default">
+                                    <i class="glyphicon glyphicon-calendar"></i> View Full Calendar
+                                </a>
+                            </div>
+                        {else}
+                            <div class="showings-no-data">
+                                <i class="glyphicon glyphicon-calendar" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                                <p>No upcoming showings or meetings</p>
+                                <a href="index.php?module=Meetings&action=EditView" class="btn btn-primary">Schedule Meeting</a>
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {* Quick Actions Widget - Full width at bottom *}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget-container">
+                <div class="widget-header">
+                    <span><i class="glyphicon glyphicon-flash"></i>{$dashboardData.widgets.quick_actions.title}</span>
+                </div>
+                <div class="widget-body quick-actions">
+                    {foreach from=$dashboardData.quickActions item=action}
+                        <a href="index.php?module={$action.module}&action={$action.action}" class="quick-action-btn">
+                            <i class="glyphicon {$action.icon}"></i>
+                            <span>{$action.label}</span>
+                        </a>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{$chartResources}
+
+<script type="text/javascript">
+{literal}
+// Placeholder for future widget initialization
+$(document).ready(function() {
+    // Initialize tooltips
+    $('[title]').tooltip();
+    
+    // Handle refresh buttons
+    $('.widget-header .glyphicon-refresh').click(function() {
+        var $widget = $(this).closest('.widget-container');
+        var $body = $widget.find('.widget-body');
+        var widgetTitle = $widget.find('.widget-header span').text();
+        
+        // Check if this is the active listings widget
+        if (widgetTitle.indexOf('My Active Listings') !== -1) {
+            // Show loading state
+            $body.html('<div style="text-align: center; padding: 40px;"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i> Loading active listings...</div>');
+            
+            // Reload the page to refresh data (simple approach)
+            window.location.reload();
+        } else {
+            // Show loading state for other widgets
+            $body.html('<div style="text-align: center;"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i> Loading...</div>');
+            
+            // Simulate refresh (replace with actual AJAX call when widgets are implemented)
+            setTimeout(function() {
+                $body.html('<div style="text-align: center; color: #999; font-style: italic;">Widget content refreshed</div>');
+            }, 1000);
+        }
+    });
+});
+{/literal}
+</script>

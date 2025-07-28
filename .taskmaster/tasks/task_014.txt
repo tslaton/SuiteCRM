@@ -1,0 +1,43 @@
+# Task ID: 14
+# Title: Create Custom Module Icons and Styling
+# Status: pending
+# Dependencies: 1, 2, 8
+# Priority: low
+# Description: Design and implement custom icons and styling for the real estate-specific modules to enhance visual recognition and branding.
+# Details:
+Create custom SVG icons for Properties, Transactions, and other real estate-specific modules. Design a consistent color scheme that aligns with real estate industry standards. Implement custom CSS in custom/themes/SuiteP/css/real_estate_style.css. Create custom record view icons for different property types and transaction stages. Modify the SuiteCRM theme to incorporate real estate-specific visual elements. Ensure all custom styling is responsive and works across devices. Use icon font libraries like Font Awesome 4.7 (compatible with SuiteCRM 7.x) for consistent iconography. Create a custom logo for the Real Estate Hub dashboard. Implement subtle animations for state changes in the Kanban board. Ensure all styling follows accessibility guidelines for color contrast and readability.
+
+# Test Strategy:
+Verify custom icons display correctly in all contexts (navigation, record views, list views). Test styling across different browsers and devices. Verify color scheme is consistent throughout the application. Test with screen readers and other accessibility tools. Verify custom animations work smoothly and don't impact performance.
+
+# Subtasks:
+## 1. Design Custom SVG Icons and Logo [pending]
+### Dependencies: None
+### Description: Create unique SVG icons for Properties, Transactions, and other real estate modules, as well as a custom logo for the Real Estate Hub dashboard.
+### Details:
+Design icons that visually represent each module and property type, ensuring they are distinct and align with real estate industry aesthetics. Develop a dashboard logo that reinforces branding.
+
+## 2. Define and Document Real Estate Color Scheme [pending]
+### Dependencies: None
+### Description: Establish a consistent color palette that aligns with real estate industry standards and supports accessibility.
+### Details:
+Select primary, secondary, and accent colors for use across modules and UI elements. Document color codes and ensure sufficient contrast for readability.
+
+## 3. Implement Custom CSS and Icon Fonts [pending]
+### Dependencies: 14.1, 14.2
+### Description: Develop and apply custom CSS in custom/themes/SuiteP/css/real_estate_style.css, integrating Font Awesome 4.7 for iconography.
+### Details:
+Write CSS rules to style modules, record views, and navigation with the new color scheme and icons. Ensure Font Awesome 4.7 is loaded and used consistently for icon elements.
+
+## 4. Enhance SuiteCRM Theme with Real Estate Visual Elements [pending]
+### Dependencies: 14.3
+### Description: Modify the SuiteCRM SuiteP theme to incorporate real estate-specific visual elements, including custom record view icons and Kanban board animations.
+### Details:
+Update theme templates and layouts to display custom icons for property types and transaction stages. Implement subtle CSS animations for Kanban board state changes.
+
+## 5. Test Responsiveness and Accessibility [pending]
+### Dependencies: 14.4
+### Description: Ensure all custom icons, styles, and animations are responsive and meet accessibility guidelines.
+### Details:
+Test the UI on various devices and browsers. Use screen readers and accessibility tools to confirm color contrast, icon legibility, and keyboard navigation.
+

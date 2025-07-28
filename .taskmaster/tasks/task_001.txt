@@ -1,0 +1,43 @@
+# Task ID: 1
+# Title: Create Property Management Module
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Develop the foundational Property Management Module by extending the SugarBean class with all required fields for real estate listings.
+# Details:
+Use Module Builder to scaffold the new 'Properties' module. Create the database table 'properties' with the following fields: MLS ID (Text), Street Address (Text), City (Text), State (Dropdown), Zip Code (Text), Price (Currency), Status (Dropdown: Active, Pending, Sold), Bedrooms (Int), Bathrooms (Decimal), Square Footage (Int), Description (Text Area), Main Photo (Image). Define relationships with Contacts (sellers/buyers) and Opportunities (renamed to Transactions). Implement the vardefs.php file with all field definitions and relationships. Create the basic views (list, detail, edit) using SuiteCRM's view.list.php, view.detail.php, and view.edit.php patterns. Ensure proper ACL controls are set up for the module. Use SuiteCRM 7.x compatible code patterns and follow the MVC structure.
+
+# Test Strategy:
+Test CRUD operations for property records. Verify all fields save and display correctly. Test relationships with Contacts and Opportunities. Ensure list views filter and sort properly. Validate that image uploads for property photos work correctly. Test ACL permissions for different user roles.
+
+# Subtasks:
+## 1. Scaffold Properties Module Using Module Builder [pending]
+### Dependencies: None
+### Description: Use SuiteCRM's Module Builder to create the foundational 'Properties' module, ensuring it extends the SugarBean class.
+### Details:
+Initiate a new module named 'Properties' via Module Builder. Configure it to extend SugarBean, setting up the basic module structure and files required for further customization.
+
+## 2. Define Database Table and Fields [pending]
+### Dependencies: 1.1
+### Description: Create the 'properties' database table with all specified fields for real estate listings.
+### Details:
+Add fields: MLS ID, Street Address, City, State (Dropdown), Zip Code, Price (Currency), Status (Dropdown: Active, Pending, Sold), Bedrooms (Int), Bathrooms (Decimal), Square Footage (Int), Description (Text Area), Main Photo (Image) in the module's vardefs.php and ensure the table is created accordingly.
+
+## 3. Implement Relationships with Contacts and Transactions [pending]
+### Dependencies: 1.2
+### Description: Define and configure relationships between Properties, Contacts (sellers/buyers), and Opportunities (renamed to Transactions).
+### Details:
+Use vardefs.php and relationship metadata to establish many-to-many or one-to-many relationships as appropriate. Ensure Opportunities are relabeled as Transactions throughout the module.
+
+## 4. Develop Basic Module Views (List, Detail, Edit) [pending]
+### Dependencies: 1.2
+### Description: Create the list, detail, and edit views for the Properties module using SuiteCRM's MVC patterns.
+### Details:
+Implement view.list.php, view.detail.php, and view.edit.php for the module. Ensure all fields are displayed and editable as required, and that image upload for Main Photo is supported.
+
+## 5. Configure Access Control and Permissions [pending]
+### Dependencies: 1.1
+### Description: Set up ACL controls for the Properties module to manage user permissions according to SuiteCRM standards.
+### Details:
+Define ACL roles and permissions for the module, ensuring only authorized users can view, edit, or delete property records. Integrate with SuiteCRM's ACL framework.
+

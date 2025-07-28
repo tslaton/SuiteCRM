@@ -4,6 +4,63 @@
 
 # SuiteCRM 7.14.6
 
+## New to this fork:
+
+To start the dev server in your local environment, install [Docker](https://www.docker.com/) then run:
+
+```
+docker-compose up -d
+docker-compose exec web composer install
+```
+
+Then navigate to `http://localhost:8080` to see it. 
+The first time you do so, SuiteCRM kicks off an installation wizard.
+
+use these database settings:
+```
+Host Name: db (the Docker service name)
+Database Name: suitecrm
+Database User: suitecrm
+Database Password: suitecrm
+```
+
+and set the admin username, password, and email however you see fit.
+
+## Added features
+
+In addition to the Docker containerization dev-facing feature, this repo adds six user-facing features targeting real estate agents:
+
+1. Properties module and mock MLS database
+2. Transactions with list and pipeline view (Inquiry -> Showing -> Offer Made -> Under Contract -> Inspection/Appraisal -> Clear to Close)
+3. Comparative Market Analysis generation (as .pdf)
+4. Real Estate Hub (focused, responsive alternative to default dashboard with more modern style)
+5. Commission calculator (adjustable in settings, calculated and totaled in Transaction pipeline)
+6. Open House -> lead tracking flow (via QR code, print out, and web form)
+
+These features are implemented using SuiteCRM's customization and extension features and intended to integrate seamlessly with the existing UI and functionality.
+
+## Use of AI
+
+These features were developed heavily leveraging AI.
+
+My first pass at understanding the repo was generated via the [DeepWiki for SuiteCRM](https://deepwiki.com/SuiteCRM/SuiteCRM). 
+
+I also looked at [SuiteCRM's Documentation](https://docs.suitecrm.com) and the associated [GitHub repo](https://deepwiki.com/SuiteCRM/SuiteDocs). 
+
+I compared to the DeepWiki for [SuiteCRM-Core](https://github.com/SuiteCRM/SuiteCRM-Core) (v8 modernization) and ultimately chose to build off of SuiteCRM v7 because it was more complete and _less_ modern, which fit the xpirit of the assignment.
+
+I followed up by asking questions of the AI there, Devin, and downloaded the docs into `_logs/DeepWiki` and my chats into `_logs` generally.
+
+I challenged DeepWiki/Devin's understanding by having Claude explore the repo and the docs and create `CLAUDE.md` based on the result.
+
+I then iterated on developing a PRD with various chats online using the uploaded document (see `features/plans` for some artifacts) and ultimately shaped one clear PRD in `.taskmaster/docs/prd.txt` (it was Gemini 2.5 Pro that produced the winner)
+
+I used taskmaster (via Claude and taskmaster's MCP server) to break that PRD into tasks, dependencies, and subtasks.
+
+Finally, I implemented the tasks in order via Claude code in a sort of iterative pair-programming fashion where Claude wrote the code and I helped provide debugging/troubleshooting guidance as we filled out the tasks.
+
+---
+
 [![Build Status](https://travis-ci.org/salesagility/SuiteCRM.svg?branch=hotfix)](https://travis-ci.org/salesagility/SuiteCRM)
 [![codecov](https://codecov.io/gh/salesagility/SuiteCRM/branch/hotfix/graph/badge.svg)](https://codecov.io/gh/salesagility/SuiteCRM/branch/hotfix)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/suitecrm/Lobby)
